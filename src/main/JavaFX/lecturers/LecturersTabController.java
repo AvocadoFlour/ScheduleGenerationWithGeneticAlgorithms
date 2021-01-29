@@ -1,6 +1,7 @@
 package main.JavaFX.lecturers;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -33,6 +34,16 @@ public class LecturersTabController {
 
     public void initialize() throws SQLException {
         initModel();
+
+        deleteLecturerButton.setOnAction(actionEvent -> {
+            Lecturer lecturer = lecturersTableView.getSelectionModel().getSelectedItem();
+            try {
+                lecturersDataModel.deleteLecturer(lecturer.getId());
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
+
     }
 
     public void openLecturerInputWindow(ActionEvent actionEvent) {
@@ -49,8 +60,10 @@ public class LecturersTabController {
         LecturersInputController lecturersInputController = loader.getController();
         lecturersInputController.initModel(lecturersDataModel);
         stage.setTitle("Lecturer Input");
-        stage.setScene(new Scene(root));
-        stage.setResizable(false);
+        if (root!=null) {
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+        } else {throw new NullPointerException();}
 
         // Serves the purpose of the new window being imposed over the other window
         stage.initModality(Modality.APPLICATION_MODAL);

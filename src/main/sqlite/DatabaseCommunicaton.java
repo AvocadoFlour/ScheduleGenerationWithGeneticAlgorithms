@@ -74,7 +74,7 @@ public class DatabaseCommunicaton {
 
     public void addLecturer (String name, String lastName, Integer qualifications) throws SQLException {
         Connection connection = connectToDatabase();
-        String sql = "INSERT INTO lectures (lecturer_name, lecturer_last_name, lecturer_qualifications) " +
+        String sql = "INSERT INTO lecturers (lecturer_name, lecturer_last_name, lecturer_qualifications) " +
                 "VALUES ('" + name + "','" + lastName + "','" + qualifications + "');";
         Statement statement = connection.createStatement();
         statement.executeUpdate(sql);
@@ -91,7 +91,7 @@ public class DatabaseCommunicaton {
             int lecturerId = rs.getInt("lecturer_id");
             String name = rs.getString("lecturer_name");
             String lastName = rs.getString("lecturer_last_name");
-            Integer qualifications = rs.getInt("lecturer_qualification");
+            Integer qualifications = rs.getInt("lecturer_qualifications");
             Lecturer l = new Lecturer(lecturerId, name, lastName, Lecturer.convertToIntegerArray(qualifications));
             lecturersList.add(l);
         }
@@ -99,8 +99,14 @@ public class DatabaseCommunicaton {
         return lecturersList;
     }
 
-    /*public ArrayList<Lecturer> deleteLecturer () throws SQLException {
-    }*/
+    public ArrayList<Lecturer> deleteLecturer (Integer id) throws SQLException {
+        Connection connection = connectToDatabase();
+        String sql = "DELETE FROM lecturers WHERE lecturer_id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1, id);
+        preparedStatement.executeUpdate();
+        return queryLecturers();
+    }
 
     public void createCoursesTable() {
     }

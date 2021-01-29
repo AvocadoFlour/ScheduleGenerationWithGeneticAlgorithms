@@ -51,9 +51,9 @@ public class LecturersDataModel {
         refreshLecturers();
     }
 
-    /*public void deleteLecturer(Integer id) throws SQLException {
+    public void deleteLecturer(Integer id) throws SQLException {
         dbcomm.deleteLecturer(id);
         refreshLecturers();
-    }*/
+    }
 
 }

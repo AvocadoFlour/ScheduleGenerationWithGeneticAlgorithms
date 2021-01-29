@@ -73,8 +73,13 @@ public class Lecturer {
 
     private String qualificationsSeparatedString() {
         StringBuilder qs = new StringBuilder();
+        int counter = 0;
         for (Integer i : this.qualifications) {
-            qs.append(i + " | ");
+            if (!(counter==0)) {
+                qs.append(" | ");
+            }
+            counter+=1;
+            qs.append(i);
         }
         return qs.toString();
     }
@@ -87,8 +92,10 @@ public class Lecturer {
 
     public static int[] convertToIntegerArray(Integer i) {
         String s = i.toString();
-        IntStream is = s.chars();
-        int[] ia = is.toArray();
+        int[] ia = new int[s.length()];
+        for (int j = 0; j < s.length(); j++) {
+            ia[j] = Integer.parseInt(String.valueOf(s.charAt(j)));
+        }
         return ia;
     }
 
