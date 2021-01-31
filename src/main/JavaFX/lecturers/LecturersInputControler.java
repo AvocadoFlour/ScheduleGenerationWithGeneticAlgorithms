@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 
 import java.sql.SQLException;
 
-public class LecturersInputController {
+public class LecturersInputControler {
 
     private LecturersDataModel lecturersDataModel;
     @FXML private CheckBox literatureCheck;

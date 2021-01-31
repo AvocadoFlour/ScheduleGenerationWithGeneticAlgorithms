@@ -1,7 +1,6 @@
 package main.JavaFX.lecturers;
 
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,22 +11,20 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import main.JavaFX.lecturesHalls.LectureHallInputController;
 import main.classes.Lecturer;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 public class LecturersTabController {
+
+    private LecturersDataModel lecturersDataModel;
     @FXML
     private TableView<Lecturer> lecturersTableView;
     @FXML
     private Button addNewLecturerButton;
     @FXML
     private Button deleteLecturerButton;
-
-    private LecturersDataModel lecturersDataModel;
-
     private TableColumn<Lecturer, String> lecturerNameColumn;
     private TableColumn<Lecturer, Integer> lecturerLastNameColumn;
     private TableColumn<Lecturer, String> lecturerQualificationsColumn;
@@ -57,8 +54,8 @@ public class LecturersTabController {
             e.printStackTrace();
         }
 
-        LecturersInputController lecturersInputController = loader.getController();
-        lecturersInputController.initModel(lecturersDataModel);
+        LecturersInputControler lecturersInputControler = loader.getController();
+        lecturersInputControler.initModel(lecturersDataModel);
         stage.setTitle("Lecturer Input");
         if (root!=null) {
             stage.setScene(new Scene(root));

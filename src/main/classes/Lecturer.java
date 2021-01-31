@@ -63,6 +63,12 @@ public class Lecturer {
         return lastNameSP;
     }
 
+    /**
+     * Returns a single integer comprised of all the teacher's qualifications.
+     * E.G. if the teacher's qualifications array holds the values [1,2],
+     * then the return will return the integer "12".
+     * @return
+     */
     private Integer qualificationsSimpleInteger() {
         StringBuilder qs = new StringBuilder();
         for (Integer i : this.qualifications) {
@@ -71,6 +77,12 @@ public class Lecturer {
         return Integer.parseInt(qs.toString());
     }
 
+    /**
+     * Returns a single string comprised of all the teacher's qualifications.
+     * E.G. if the teacher's qualifications array holds the values [1,2],
+     * then the return will return the string "12".
+     * @return returns the teacher qualifications as a single combined string
+     */
     private String qualificationsSeparatedString() {
         StringBuilder qs = new StringBuilder();
         int counter = 0;

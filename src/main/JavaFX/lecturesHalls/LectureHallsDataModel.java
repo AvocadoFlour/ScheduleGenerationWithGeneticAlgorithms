@@ -10,17 +10,15 @@ import main.sqlite.DatabaseCommunicaton;
 
 import java.sql.SQLException;
 
-
 public class LectureHallsDataModel {
     DatabaseCommunicaton dbcomm = new DatabaseCommunicaton();
+    private ObjectProperty<LectureHall> currentLectureHall = new SimpleObjectProperty<>();
+    public ObservableList<LectureHall> lectureHallList = FXCollections.observableArrayList(lectureHall ->
+            new Observable[]{lectureHall.codeProperty(), lectureHall.capacityProperty()});
 
     public ObservableList<LectureHall> getLectureHallList() {
         return lectureHallList;
     }
-
-    public ObservableList<LectureHall> lectureHallList = FXCollections.observableArrayList(lectureHall -> new Observable[]{lectureHall.codeProperty(), lectureHall.capacityProperty()});
-    private ObjectProperty<LectureHall> currentLectureHall = new SimpleObjectProperty<>();
-
 
     public ObjectProperty<LectureHall> currentLectureHall() {
         return currentLectureHall;

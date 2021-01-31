@@ -103,7 +103,7 @@ public class LectureHallsTabController {
     }
 
     /**
-     * Setting an instance of the LecturesDataModel class as the overall host of all the displayed data in the stage.
+     * Setting an instance of the CoursesDataModel class as the overall host of all the displayed data in the stage.
      * The purpose being so that two different stages can affect each other by being build atop of the same
      * underlying instance of this class.
      * @throws SQLException

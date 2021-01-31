@@ -1,5 +1,10 @@
 package main.classes;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class Course {
 
     private Long id;
@@ -26,6 +31,26 @@ public class Course {
 
     public void setCourseName(String courseName) {
         this.courseName = courseName;
+    }
+
+    public int getTeacherQualification() {
+        return teacherQualification;
+    }
+
+    public void setTeacherQualification(int teacherQualification) {
+        this.teacherQualification = teacherQualification;
+    }
+
+    public StringProperty courseNameProperty() {
+        StringProperty courseNameSP = new SimpleStringProperty();
+        courseNameSP.set(this.courseName);
+        return courseNameSP;
+    }
+
+    public IntegerProperty teacherQualificationProperty() {
+        IntegerProperty teacherQualificationProperty = new SimpleIntegerProperty();
+        teacherQualificationProperty.set(this.teacherQualification);
+        return teacherQualificationProperty;
     }
 
     @Override

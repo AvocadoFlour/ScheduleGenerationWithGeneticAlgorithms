@@ -12,15 +12,13 @@ import java.sql.SQLException;
 
 public class LecturersDataModel {
     DatabaseCommunicaton dbcomm = new DatabaseCommunicaton();
+    private ObjectProperty<Lecturer> currentLecturer = new SimpleObjectProperty<>();
+    public ObservableList<Lecturer> lecturersList = FXCollections.observableArrayList(Lecturer ->
+            new Observable[]{Lecturer.nameProperty(), Lecturer.lastNameProperty(), Lecturer.qualificationsProperty()});
 
     public ObservableList<Lecturer> getLecturersList() {
-        return LecturerList;
+        return lecturersList;
     }
-
-    public ObservableList<Lecturer> LecturerList = FXCollections.observableArrayList(Lecturer ->
-            new Observable[]{Lecturer.nameProperty(), Lecturer.lastNameProperty(), Lecturer.qualificationsProperty()});
-    private ObjectProperty<Lecturer> currentLecturer = new SimpleObjectProperty<>();
-
 
     public ObjectProperty<Lecturer> currentLecturer() {
         return currentLecturer;
@@ -36,14 +34,14 @@ public class LecturersDataModel {
 
     public ObservableList<Lecturer> loadLecturers() throws SQLException {
         dbcomm.createLecturersTable();
-        ObservableList<Lecturer> LecturerObservableList = FXCollections.observableArrayList(dbcomm.queryLecturers());
-        this.LecturerList = LecturerObservableList;
-        return LecturerObservableList;
+        ObservableList<Lecturer> lecturerObservableList = FXCollections.observableArrayList(dbcomm.queryLecturers());
+        this.lecturersList = lecturerObservableList;
+        return lecturerObservableList;
     }
 
     public void refreshLecturers() throws SQLException {
-        this.LecturerList.clear();
-        this.LecturerList.addAll(FXCollections.observableArrayList(dbcomm.queryLecturers()));
+        this.lecturersList.clear();
+        this.lecturersList.addAll(FXCollections.observableArrayList(dbcomm.queryLecturers()));
     }
 
     public void addLecturer(String name, String  lastName, Integer qualifications) throws SQLException {

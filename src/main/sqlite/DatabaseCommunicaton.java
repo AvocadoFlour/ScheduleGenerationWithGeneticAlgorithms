@@ -1,5 +1,6 @@
 package main.sqlite;
 
+import main.classes.Course;
 import main.classes.LectureHall;
 import main.classes.Lecturer;
 
@@ -99,22 +100,57 @@ public class DatabaseCommunicaton {
         return lecturersList;
     }
 
-    public ArrayList<Lecturer> deleteLecturer (Integer id) throws SQLException {
+    public void deleteLecturer (Integer id) throws SQLException {
         Connection connection = connectToDatabase();
         String sql = "DELETE FROM lecturers WHERE lecturer_id = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setInt(1, id);
         preparedStatement.executeUpdate();
-        return queryLecturers();
     }
 
-    public void createCoursesTable() {
+    public void createCoursesTable() throws SQLException {
+        Connection connection = connectToDatabase();
+        String sql = "CREATE TABLE IF NOT EXISTS courses " +
+                "(course_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                " course_name VARCHAR(20) UNIQUE NOT NULL, " +
+                " course_qualification INTEGER NOT NULL);";
+        Statement statement = connection.createStatement();
+        statement.executeUpdate(sql);
+        connection.close();
     }
 
-    public void addCourse () {
+    public void addCourse (String courseName, Integer courseQualification) throws SQLException {
+        Connection connection = connectToDatabase();
+        String sql = "INSERT INTO courses (course_name, course_qualification) " +
+                "VALUES ('" + courseName + "','" + courseQualification + "');";
+        Statement statement = connection.createStatement();
+        statement.executeUpdate(sql);
+        connection.close();
     }
 
-    public void queryCourses () {
+    public ArrayList<Course> queryCourses () throws SQLException {
+        ArrayList<Course> coursesList = new ArrayList<>();
+        Connection connection = connectToDatabase();
+        String querry = "SELECT * FROM courses";
+        Statement statement = connection.createStatement();
+        ResultSet rs = statement.executeQuery(querry);
+        while (rs.next()) {
+            Long courseId = rs.getLong("course_id");
+            String courseName = rs.getString("course_name");
+            Integer courseQualification = rs.getInt("course_qualification");
+            Course c = new Course(courseId, courseName, courseQualification);
+            coursesList.add(c);
+        }
+        connection.close();
+        return coursesList;
+    }
+
+    public void deleteCourse(Long id) throws SQLException {
+        Connection connection = connectToDatabase();
+        String sql = "DELETE FROM courses WHERE course_id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setLong(1, id);
+        preparedStatement.executeUpdate();
     }
 
     public void createClassGroupsTable() {
