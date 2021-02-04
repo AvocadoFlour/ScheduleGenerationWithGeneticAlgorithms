@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="155.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.JavaFX.courses.CoursesInputController">
+   <children>
+      <StackPane fx:id="stackPane" maxHeight="40.0" maxWidth="200.0" minHeight="40.0" minWidth="200.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="115.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="warningText" alignment="CENTER" contentDisplay="CENTER" prefHeight="35.0" prefWidth="160.0" text="Input course details" textAlignment="CENTER" wrapText="true" StackPane.alignment="CENTER" />
+         </children>
+      </StackPane>
+      <Button fx:id="createCourseButton" layoutX="13.0" layoutY="117.0" mnemonicParsing="false" text="Create course" />
+      <Button fx:id="cancelButton" layoutX="130.0" layoutY="117.0" mnemonicParsing="false" text="Cancel" />
+      <TextField fx:id="courseNameTextField" layoutX="11.0" layoutY="40.0" prefHeight="45.0" prefWidth="180.0" promptText="Course name" />
+      <RadioButton fx:id="literatureRadioButton" layoutX="13.0" layoutY="92.0" mnemonicParsing="false" text="Literature" />
+      <RadioButton fx:id="scienceRadioButton" layoutX="121.0" layoutY="92.0" mnemonicParsing="false" text="Science" />
+   </children>
+</AnchorPane>

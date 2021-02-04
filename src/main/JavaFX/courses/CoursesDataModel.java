@@ -44,7 +44,7 @@ public class CoursesDataModel {
         this.coursesList.addAll(FXCollections.observableArrayList(dbcomm.queryCourses()));
     }
 
-    public void addCourse(String name,Integer qualification) throws SQLException {
+    public void addCourse(String name,int qualification) throws SQLException {
         dbcomm.addCourse(name, qualification);
         refreshCourses();
     }

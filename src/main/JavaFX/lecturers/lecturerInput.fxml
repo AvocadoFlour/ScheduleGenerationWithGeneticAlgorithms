@@ -2,16 +2,16 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.text.Text?>
 
 <AnchorPane fx:id="lecturerInputWindow" prefHeight="170.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.JavaFX.lecturers.LecturersInputControler">
     <children>
       <StackPane prefHeight="40.0" prefWidth="200.0">
          <children>
-            <Text fx:id="warningText" boundsType="VISUAL" fill="#00000046" strokeType="OUTSIDE" strokeWidth="0.0" text="Input lecturer details" />
+            <Label fx:id="warningText" alignment="CENTER" contentDisplay="CENTER" prefHeight="35.0" prefWidth="160.0" text="Input course details" textAlignment="CENTER" wrapText="true" StackPane.alignment="CENTER" />
          </children>
       </StackPane>
         <CheckBox fx:id="literatureCheck" layoutX="26.0" layoutY="101.0" mnemonicParsing="false" text="Literature" />

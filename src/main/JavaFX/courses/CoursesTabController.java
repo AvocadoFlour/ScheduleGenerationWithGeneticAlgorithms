@@ -13,6 +13,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import main.JavaFX.lecturers.LecturersInputControler;
 import main.classes.Course;
+import main.classes.Lecturer;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -46,7 +47,8 @@ public class CoursesTabController {
 
             CoursesInputController coursesInputController = loader.getController();
             coursesInputController.initModel(coursesDataModel);
-            stage.setTitle("Lecturer Input");
+
+            stage.setTitle("Course Input");
             if (root!=null) {
                 stage.setScene(new Scene(root));
                 stage.setResizable(false);
@@ -56,6 +58,15 @@ public class CoursesTabController {
             stage.initModality(Modality.APPLICATION_MODAL);
 
             stage.show();
+        });
+
+        deleteLCourseButton.setOnAction(actionEvent -> {
+            Course course = coursesTableView.getSelectionModel().getSelectedItem();
+            try {
+                coursesDataModel.deleteCourse(course.getId());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         });
 
     };
@@ -70,7 +81,7 @@ public class CoursesTabController {
         this.coursesDataModel = new CoursesDataModel();
         courseNameColumn = new TableColumn<>("Name");
         courseQualificationColumn = new TableColumn<>("Teacher qualification");
-        courseNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        courseNameColumn.setCellValueFactory(new PropertyValueFactory<>("courseName"));
         courseQualificationColumn.setCellValueFactory(new PropertyValueFactory<>("teacherQualification"));
         coursesTableView.getColumns().add(0, courseNameColumn);
         coursesTableView.getColumns().add(1, courseQualificationColumn);

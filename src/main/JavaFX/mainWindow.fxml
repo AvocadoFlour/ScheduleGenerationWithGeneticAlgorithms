@@ -39,19 +39,14 @@
                     <fx:include fx:id="lecturersTabController" source="lecturers/lecturersTab.fxml" />
                 </content>
             </Tab>
-            <Tab fx:id="lecturesTab" text="Lectures">
-               <!-- <content>
-                    <fx:include source="lectures/coursesTab.fxml" fx:id="lecturesTabController"/>
-                </content>-->
+            <Tab fx:id="vocationsTab" text="Vocations">
+                <content>
+                    <fx:include source="vocations/vocationsTab.fxml" fx:id="vocationsTabController"/>
+                </content>
             </Tab>
             <Tab fx:id="classGroupsTab" text="Class groups">
                 <!--<content>
                     <fx:include source="classGroups/classGroupsTab.fxml" fx:id="classGroupsTabController"/>
-                </content>-->
-            </Tab>
-            <Tab fx:id="vocationsTab" text="Vocations">
-                <!--<content>
-                    <fx:include source="vocations/vocationsTab.fxml" fx:id="vocationsTabController"/>
                 </content>-->
             </Tab>
         </tabs>
@@ -60,7 +55,4 @@
          </BorderPane.margin>
       </TabPane>
    </center>
-   <bottom>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-   </bottom>
 </BorderPane>

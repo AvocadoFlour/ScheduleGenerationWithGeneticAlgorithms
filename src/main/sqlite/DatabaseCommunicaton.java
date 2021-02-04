@@ -3,9 +3,16 @@ package main.sqlite;
 import main.classes.Course;
 import main.classes.LectureHall;
 import main.classes.Lecturer;
+import main.classes.Vocation;
+
+import javax.swing.*;
+
+import static java.lang.Math.toIntExact;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DatabaseCommunicaton {
 
@@ -119,7 +126,7 @@ public class DatabaseCommunicaton {
         connection.close();
     }
 
-    public void addCourse (String courseName, Integer courseQualification) throws SQLException {
+    public void addCourse (String courseName, int courseQualification) throws SQLException {
         Connection connection = connectToDatabase();
         String sql = "INSERT INTO courses (course_name, course_qualification) " +
                 "VALUES ('" + courseName + "','" + courseQualification + "');";
@@ -137,12 +144,28 @@ public class DatabaseCommunicaton {
         while (rs.next()) {
             Long courseId = rs.getLong("course_id");
             String courseName = rs.getString("course_name");
-            Integer courseQualification = rs.getInt("course_qualification");
+            int courseQualification = rs.getInt("course_qualification");
             Course c = new Course(courseId, courseName, courseQualification);
             coursesList.add(c);
         }
         connection.close();
         return coursesList;
+    }
+
+    public Course queryCourse (Long id) throws SQLException {
+        Course course = null;
+        Connection connection = connectToDatabase();
+        String query = "SELECT * FROM courses WHERE course_id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setLong(1, id);
+        ResultSet rs = preparedStatement.executeQuery(query);
+        while (rs.next()) {
+            Long courseId = rs.getLong("course_id");
+            String courseName = rs.getString("course_name");
+            int courseQualification = rs.getInt("course_qualification");
+            course = new Course(courseId,courseName,courseQualification);
+        }
+        return course;
     }
 
     public void deleteCourse(Long id) throws SQLException {
@@ -153,6 +176,89 @@ public class DatabaseCommunicaton {
         preparedStatement.executeUpdate();
     }
 
+    public void createVocationsTable() throws SQLException {
+        Connection connection = connectToDatabase();
+        String sql = "CREATE TABLE IF NOT EXISTS vocations " +
+                "(vocation_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                " vocation_name VARCHAR(30) NOT NULL);";
+        Statement statement = connection.createStatement();
+        statement.executeUpdate(sql);
+        connection.close();
+    }
+    public void addVocation (String vocationName, HashMap<Course, Integer> courseRequirements) throws SQLException {
+        Connection connection = connectToDatabase();
+        String sql = "INSERT INTO vocations (vocation_name) " +
+                "VALUES ('" + vocationName + "');";
+        Statement statement = connection.createStatement();
+        statement.executeUpdate(sql);
+        ResultSet rs = statement.getGeneratedKeys();
+        rs.next();
+        statement.executeUpdate(sql);
+        sql = "INSERT INTO vocation_course_requirements (vocation_id, course_id) " +
+                "VALUES ('" + vocationId + "','" + courseId + "','" + hourseRequired + "')";
+    }
+
+    public ArrayList<Vocation> queryVocations() throws SQLException {
+        ArrayList<Vocation> vocationsList = new ArrayList<>();
+        Connection connection = connectToDatabase();
+        String query = "SELECT * FROM vocations";
+        Statement statement = connection.createStatement();
+        ResultSet rs = statement.executeQuery(query);
+        while (rs.next()) {
+            Long vocationId = rs.getLong("vocation_id");
+            String vocationName = rs.getString("vocation_name");
+            HashMap<Course, Integer> courseRequirements = queryVocationsCourseRequirements(toIntExact(vocationId));
+            Vocation v = new Vocation(vocationId,vocationName,courseRequirements);
+            vocationsList.add(v);
+        }
+        connection.close();
+        return vocationsList;
+    }
+
+    public void deleteVocation(Integer id) throws SQLException {
+        Connection connection = connectToDatabase();
+        String vocationCourseRequirementsDeleteSql = "DELETE FROM vocation_course_requirements WHERE vocation_id = ?";
+        PreparedStatement vcrdSql = connection.prepareStatement(vocationCourseRequirementsDeleteSql);
+        vcrdSql.setLong(1, id);
+        vcrdSql.executeUpdate();
+        String vocationDeletesql = "DELETE FROM vocations WHERE vocation_id = ?";
+        PreparedStatement vdSql = connection.prepareStatement(vocationDeletesql);
+        vdSql.setLong(1, id);
+        vdSql.executeUpdate();
+        connection.close();
+    }
+
+    public void createVocationsCourseRequirementsTable() throws SQLException {
+        Connection connection = connectToDatabase();
+        String sql = "CREATE TABLE IF NOT EXISTS vocation_course_requirements " +
+                "(FOREIGN KEY(vocation_id) REFERENCES vocations(vocation_id)," +
+                " FOREIGN KEY(course_id) REFERENCES courses(course_id)," +
+                " hours_required INTEGER NOT NULL);";
+        Statement statement = connection.createStatement();
+        statement.executeUpdate(sql);
+    }
+
+    public HashMap<Course, Integer> queryVocationsCourseRequirements(Integer vocationId) throws SQLException {
+        Connection connection = connectToDatabase();
+        String query = "SELECT * FROM vocation_course_requirements WHERE vocation_id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setLong(1, vocationId);
+        ResultSet rs = preparedStatement.executeQuery();
+        HashMap<Course, Integer> courseRequirements = new HashMap<>();
+        while (rs.next()) {
+            long courseId = rs.getLong("course_id");
+            Course course = queryCourse(courseId);
+            int hoursRequired = rs.getInt("hours_required");
+            courseRequirements.put(course, hoursRequired);
+        }
+        connection.close();
+        return courseRequirements;
+    }
+
+    public void addVocationCourseRequirement() throws SQLException {
+
+    }
+
     public void createClassGroupsTable() {
     }
 
@@ -160,24 +266,6 @@ public class DatabaseCommunicaton {
     }
 
     public void queryClassGroup () {
-    }
-
-    public void createLecturesTable() {
-    }
-
-    public void addLecture () {
-    }
-
-    public void queryLectures () {
-    }
-
-    public void createVocationsTable() {
-    }
-
-    public void addVocation () {
-    }
-
-    public void queryVocations () {
     }
 
 }

@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -22,13 +23,13 @@ public class LecturersInputControler {
     @FXML private TextField lastNameField;
     @FXML private Button confirmButton;
     @FXML private Button cancelButton;
-    @FXML private Text warningText;
+    @FXML private Label warningText;
 
     public void initialize() {
 
         confirmButton.setOnAction(actionEvent -> {
             if(!literatureCheck.isSelected()&&!scienceCheck.isSelected()) {
-                warningText.setFill(Color.color( 0.6f, 0.2f, 0.2f));
+                warningText.setTextFill(Color.color( 0.6f, 0.2f, 0.2f));
                 warningText.setText("Select at least one qualification!");
                 return;
             }
