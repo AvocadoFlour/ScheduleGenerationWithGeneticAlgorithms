@@ -158,7 +158,7 @@ public class DatabaseCommunicaton {
         String query = "SELECT * FROM courses WHERE course_id = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setLong(1, id);
-        ResultSet rs = preparedStatement.executeQuery(query);
+        ResultSet rs = preparedStatement.executeQuery();
         while (rs.next()) {
             Long courseId = rs.getLong("course_id");
             String courseName = rs.getString("course_name");
@@ -191,11 +191,22 @@ public class DatabaseCommunicaton {
                 "VALUES ('" + vocationName + "');";
         Statement statement = connection.createStatement();
         statement.executeUpdate(sql);
+
+        //Getting the just created Vocation's table id
         ResultSet rs = statement.getGeneratedKeys();
-        rs.next();
-        statement.executeUpdate(sql);
-        sql = "INSERT INTO vocation_course_requirements (vocation_id, course_id) " +
-                "VALUES ('" + vocationId + "','" + courseId + "','" + hourseRequired + "')";
+        int vocationId = Integer.parseInt(rs.getString(1));
+        String sqlBuilder = "INSERT INTO vocation_course_requirements (vocation_id, course_id, hours_required) VALUES";
+        StringBuilder sb = new StringBuilder();
+        sb.append(sqlBuilder);
+        for(Map.Entry<Course, Integer> e : courseRequirements.entrySet()) {
+            sb.append("('" + vocationId + "', '" +e.getKey().getId() + "', '" + e.getValue() + "'),");
+        }
+        sb.setLength(sb.length() - 1);
+        sb.append(";");
+
+        System.out.println(sb.toString());
+        statement.executeUpdate(sb.toString());
+
     }
 
     public ArrayList<Vocation> queryVocations() throws SQLException {
@@ -231,9 +242,11 @@ public class DatabaseCommunicaton {
     public void createVocationsCourseRequirementsTable() throws SQLException {
         Connection connection = connectToDatabase();
         String sql = "CREATE TABLE IF NOT EXISTS vocation_course_requirements " +
-                "(FOREIGN KEY(vocation_id) REFERENCES vocations(vocation_id)," +
-                " FOREIGN KEY(course_id) REFERENCES courses(course_id)," +
-                " hours_required INTEGER NOT NULL);";
+                "(vocation_id INTEGER, " +
+                "course_id INTEGER, " +
+                "hours_required INTEGER NOT NULL, " +
+                "FOREIGN KEY(vocation_id) REFERENCES vocations(vocation_id), " +
+                "FOREIGN KEY(course_id) REFERENCES courses(course_id));";
         Statement statement = connection.createStatement();
         statement.executeUpdate(sql);
     }

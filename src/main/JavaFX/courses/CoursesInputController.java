@@ -49,13 +49,18 @@ public class CoursesInputController {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            close();
         });
 
         cancelButton.setOnAction(actionEvent -> {
-            Stage stage = (Stage) cancelButton.getScene().getWindow();
-            stage.close();
+            close();
         });
 
+    }
+
+    private void close() {
+        Stage stage = (Stage) cancelButton.getScene().getWindow();
+        stage.close();
     }
 
     public void initModel(CoursesDataModel coursesDataModel) {

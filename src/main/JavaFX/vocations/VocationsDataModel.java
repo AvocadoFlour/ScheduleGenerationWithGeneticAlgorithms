@@ -16,7 +16,7 @@ public class VocationsDataModel {
     DatabaseCommunicaton dbcomm = new DatabaseCommunicaton();
     private ObjectProperty<Vocation> currentVocation = new SimpleObjectProperty<>();
     public ObservableList<Vocation> vocationsList = FXCollections.observableArrayList(vocation ->
-            new Observable[]{vocation.vocationNameProperty(), vocation.courseRequirementsPropery()});
+            new Observable[]{vocation.vocationNameProperty(), vocation.courseRequirementsProperty()});
 
     public ObservableList<Vocation> getVocationsList() {
         return vocationsList;
@@ -36,6 +36,7 @@ public class VocationsDataModel {
 
     public ObservableList<Vocation> loadVocations() throws SQLException {
         dbcomm.createVocationsTable();
+        dbcomm.createVocationsCourseRequirementsTable();
         ObservableList<Vocation> vocationObservableList = FXCollections.observableArrayList(dbcomm.queryVocations());
         this.vocationsList = vocationObservableList;
         return vocationObservableList;

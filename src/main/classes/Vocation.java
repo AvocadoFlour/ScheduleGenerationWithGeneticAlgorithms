@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Vocation {
 
@@ -47,10 +48,12 @@ public class Vocation {
         return vocationNameSP;
     }
 
-    public StringProperty courseRequirementsPropery() {
+    public StringProperty courseRequirementsProperty() {
         StringProperty courseRequirementsSP = new SimpleStringProperty();
         StringBuilder sb = new StringBuilder();
-        this.courseRequirements.forEach((course, integer) -> sb.append(course + " " + integer));
+        for(Map.Entry<Course, Integer> m : this.courseRequirements.entrySet()) {
+            sb.append(m.getKey().getCourseName() + " " + m.getValue());
+        }
         courseRequirementsSP.set(sb.toString());
         return courseRequirementsSP;
     }
