@@ -56,6 +56,15 @@ public class VocationsTabController {
                 stage.show();
             });
 
+        deleteVocationButton.setOnAction(actionEvent -> {
+            Vocation vocationToDelete = vocationsTableView.getSelectionModel().getSelectedItem();
+            try {
+                vocationsDataModel.deleteVocation((int)vocationToDelete.getId());
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
+
     }
 
     public void initModel() throws SQLException {

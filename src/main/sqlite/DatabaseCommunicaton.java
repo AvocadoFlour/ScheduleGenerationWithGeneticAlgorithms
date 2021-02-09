@@ -232,8 +232,8 @@ public class DatabaseCommunicaton {
         PreparedStatement vcrdSql = connection.prepareStatement(vocationCourseRequirementsDeleteSql);
         vcrdSql.setLong(1, id);
         vcrdSql.executeUpdate();
-        String vocationDeletesql = "DELETE FROM vocations WHERE vocation_id = ?";
-        PreparedStatement vdSql = connection.prepareStatement(vocationDeletesql);
+        String vocationDeleteSql = "DELETE FROM vocations WHERE vocation_id = ?";
+        PreparedStatement vdSql = connection.prepareStatement(vocationDeleteSql);
         vdSql.setLong(1, id);
         vdSql.executeUpdate();
         connection.close();
