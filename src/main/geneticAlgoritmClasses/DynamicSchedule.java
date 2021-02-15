@@ -1,36 +1,19 @@
 package main.geneticAlgoritmClasses;
 
-import main.classes.Course;
-import main.classes.Lecture;
+import main.classes.*;
 import main.mockData.MockData;
 import org.jgap.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Array;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-public class SmartSchedule extends FitnessFunction implements IChromosome {
+public class DynamicSchedule extends FitnessFunction implements IChromosome {
 
-    MockData md = new MockData();
+    public DynamicSchedule() {}
 
-    public SmartSchedule() {
-    }
-
-    private List<Lecture> lectures = new ArrayList<>();
-
-    public void addLecture(Lecture lecture) {
-        lectures.add(lecture);
-    }
-
-    public List<Lecture> getLectures() {
-        return lectures;
-    }
-
-    public void setLectures(List<Lecture> lectures) {
-        this.lectures = lectures;
-    }
-
-
-    public static void printSchedule(SmartSchedule schedule) {
+    public static void printSchedule(DynamicSchedule schedule) {
 
         String empty = "---";
         String taken = "███";
@@ -47,18 +30,31 @@ public class SmartSchedule extends FitnessFunction implements IChromosome {
             for (int i = l.getToH(); i <= 12; i++) {
                 sb.append(empty);
             }
-            sb.append(" " + l.getClassGroup().getClassIdentification() + ", " + l.getClassGroup().getNumberOfStudents() + " students, " + l.getLectureHall().getHallCode() + " capacity: " + l.getLectureHall().getCapacity() + " " + l.getCourse().getCourseName() + " " + l.getLecturer().getName() + " " + l.getLecturer().getLastName() + "\n");
+            sb.append(" " + l.getClassGroup().getClassIdentification() + ", " + l.getClassGroup().getNumberOfStudents() + " students, " + l.getLectureHall().getHallCode() + " capacity: " + l.getLectureHall().getCapacity() + " " + l.getCourse().getCourseName() + " " + l.getLecturer().getName() + " " + l.getLecturer().getLastName() + ". From " + l.getFromH() + " to " + l.getToH() + "\n");
             System.out.println(sb);
         }
     }
 
-    public SmartSchedule(IChromosome chromosome) {
+    private List<Lecture> lectures = new ArrayList<>();
+
+    public void addLecture(Lecture lecture) {
+        lectures.add(lecture);
+    }
+
+    public List<Lecture> getLectures() {
+        return lectures;
+    }
+
+    public void setLectures(List<Lecture> lectures) {
+        this.lectures = lectures;
+    }
+
+    public DynamicSchedule(IChromosome chromosome) {
 
         int lecturer = 0;
         int classGroup = 0;
         int course = 0;
         int lectureHall = 0;
-        Course courseObject = null;
         int lectureLength = 0;
         Long j = 0l;
 
@@ -71,8 +67,6 @@ public class SmartSchedule extends FitnessFunction implements IChromosome {
             } else if (i % 5 == 1) {
                 // Course gene
                 course = (Integer) chromosome.getGene(i).getAllele();
-                courseObject = md.courses.get(course);
-
             } else if (i % 5 == 2) {
                 // Lecturer Gene
                 lecturer = (Integer) chromosome.getGene(i).getAllele();
@@ -85,14 +79,29 @@ public class SmartSchedule extends FitnessFunction implements IChromosome {
                 // FromH gene
                 Integer fromH = (Integer) chromosome.getGene(i).getAllele();
 
+                /* Determining the length of the lecture:
+                Because the gene's maximum value is probably a number greater than the number of courses
+                that a particular classGroup the number of the gene is modulo-ed by the number of the
+                courses that the classGroups has prescribed. */
+                int numberOfCoursesInVocation = DynamicEvolveAndSolve.classGroupsArrayList.get(classGroup).getVocation().getCourseRequirements().size();
+                int courseNumber = course % numberOfCoursesInVocation;
+                HashMap<Course, Integer> temp = DynamicEvolveAndSolve.classGroupsArrayList.get(classGroup).getVocation().getCourseRequirements();
+                ArrayList<Course> tempList = new ArrayList<>();
+                for (Map.Entry<Course, Integer> entry : temp.entrySet()) {
+                    tempList.add(entry.getKey());
+                }
+                Course courseObject = tempList.get(courseNumber);
+                lectureLength = DynamicEvolveAndSolve.classGroupsArrayList.get(classGroup).getVocation().getCourseRequirements().get(courseObject);
                 // Setting the end time of each course to be what is defined as the necessary lecture length depending on the vocation admitting it.
-                lectureLength = md.classGroups.get(classGroup).getVocation().getCourseRequirements().get(courseObject);
                 int toH = fromH + lectureLength;
 
-                // // Setting the lecturer to be a lecturer that holds the qualification to hold a particular class.
-                // // To-be implemented.
+                // Setting the lecturer to be a lecturer that holds the qualification to hold a particular class.
+                ArrayList<Lecturer> lecturerArrayList = new ArrayList<>(DynamicEvolveAndSolve.lecturersArrayList.stream().filter(
+                        l -> IntStream.of(l.getQualifications()).anyMatch(x -> x == courseObject.getTeacherQualification())).collect(Collectors.toList()));
+                int numberOfQualifiedLecturers = lecturerArrayList.size();
+                int lecturerNumber = lecturer % numberOfQualifiedLecturers;
 
-                this.lectures.add(new Lecture(j, md.lecturers.get(lecturer), courseObject, md.classGroups.get(classGroup), md.lectureHalls.get(lectureHall), fromH, toH));
+                this.lectures.add(new Lecture(j, lecturerArrayList.get(lecturerNumber), courseObject, DynamicEvolveAndSolve.classGroupsArrayList.get(classGroup), DynamicEvolveAndSolve.lectureHallsArrayList.get(lectureHall), fromH, toH));
             }
         }
     }
@@ -100,11 +109,35 @@ public class SmartSchedule extends FitnessFunction implements IChromosome {
     @Override
     protected double evaluate(IChromosome chromosome) {
 
-        SmartSchedule test = new SmartSchedule(chromosome);
+        DynamicSchedule test = new DynamicSchedule(chromosome);
 
-        double fitnessValue = 61;
+        HashMap<String,HashMap<Course,Integer>> vocationCourseRequirements = new HashMap<>();
+        //This complicated method is necessary in order to avoid copying by reference
+        for(ClassGroup cg : DynamicEvolveAndSolve.classGroupsArrayList) {
+            HashMap<Course, Integer> tempMap = new HashMap<>();
+            for (Map.Entry<Course, Integer> entry : cg.getVocation().getCourseRequirements().entrySet()) {
+                tempMap.put(entry.getKey(), entry.getValue());
+            }
+            vocationCourseRequirements.put(cg.getClassIdentification(), tempMap);
+        }
+
+        double fitnessValue = 161;
 
         for (int i = 0; i < test.lectures.size(); i++) {
+
+            // Check if every vocation has the needed amount of courses scheduled
+            if(vocationCourseRequirements.get(test.lectures.get(i).getClassGroup().getClassIdentification()).containsKey(test.lectures.get(i).getCourse())) {
+                vocationCourseRequirements.get(test.lectures.get(i).getClassGroup().getClassIdentification()).remove(test.lectures.get(i).getCourse());
+            } else {
+                fitnessValue -= 1;
+            }
+
+            /*// Check if appointed lecturer has the necessary qualification
+            int courseQualification = test.lectures.get(i).getCourse().getTeacherQualification();
+            boolean contains = IntStream.of(test.lectures.get(i).getLecturer().getQualifications()).anyMatch(x -> x == courseQualification);
+            if (!contains) {
+                fitnessValue -= 1;
+            }*/
 
             // Checking if lectureHall has sufficient capacity.
             if (test.lectures.get(i).getLectureHall().getCapacity() < test.lectures.get(i).getClassGroup().getNumberOfStudents()) {
@@ -131,15 +164,18 @@ public class SmartSchedule extends FitnessFunction implements IChromosome {
                     if (test.lectures.get(i).getLecturer() == test.lectures.get(j).getLecturer()) {
                         // DEDUCT POINTS: The appointed lecturer has two lectures scheduled during overlapping timeframes
                         fitnessValue -= 1;
+                    }
 
+                    // Checking if a classGroup has two lectures scheduled during overlapping time-frames.
+                    if (test.lectures.get(i).getClassGroup() == test.lectures.get(j).getClassGroup()) {
+                        // DEDUCT POINTS: The appointed lecturer has two lectures scheduled during overlapping timeframes
+                        fitnessValue -= 1;
                     }
                 }
-                ;
-
             }
         }
 
-        // Check if every vocation has the needed amount of lectures scheduled
+        // Check if every vocation has the needed amount of courses scheduled
 
         return fitnessValue;
     }

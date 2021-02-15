@@ -1,12 +1,7 @@
 package main.JavaFX;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Tab;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import main.JavaFX.classGroups.ClassGroupDataModel;
 import main.JavaFX.classGroups.ClassGroupsTabController;
 import main.JavaFX.courses.CoursesDataModel;
@@ -17,9 +12,15 @@ import main.JavaFX.lecturers.LecturersDataModel;
 import main.JavaFX.lecturers.LecturersTabController;
 import main.JavaFX.vocations.VocationsDataModel;
 import main.JavaFX.vocations.VocationsTabController;
+import main.classes.ClassGroup;
+import main.classes.Course;
+import main.classes.LectureHall;
+import main.classes.Lecturer;
+import main.geneticAlgoritmClasses.DynamicEvolveAndSolve;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class MainWindowController {
 
@@ -55,6 +56,17 @@ public class MainWindowController {
         this.coursesTabController.injectMainWindowController(this);
         this.lecturersTabController.injectMainWindowController(this);
         this.lectureHallsTabController.injectMainWindowController(this);
+
+        produceScheduleMenuItem.setOnAction(actionEvent -> {
+            try {
+                DynamicEvolveAndSolve.execute(classGroupDataModel.getClassGroupsArrayList(),
+                        coursesDataModel.getCoursesArrayList(), lecturersDataModel.getLecturersArrayList(),
+                        lectureHallsDataModel.getClassGroupsArrayList());
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
 
     }
 

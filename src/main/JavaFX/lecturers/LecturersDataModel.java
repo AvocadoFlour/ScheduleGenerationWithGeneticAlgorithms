@@ -9,6 +9,7 @@ import main.classes.Lecturer;
 import main.sqlite.DatabaseCommunicaton;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class LecturersDataModel {
     DatabaseCommunicaton dbcomm = new DatabaseCommunicaton();
@@ -52,6 +53,10 @@ public class LecturersDataModel {
     public void deleteLecturer(Integer id) throws SQLException {
         dbcomm.deleteLecturer(id);
         refreshLecturers();
+    }
+
+    public ArrayList<Lecturer> getLecturersArrayList () throws SQLException {
+        return dbcomm.queryLecturers();
     }
 
 }

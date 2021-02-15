@@ -36,7 +36,7 @@ public class ClassGroupDataModel {
         return this.currentClassGroup.get();
     }
 
-    private ArrayList<ClassGroup> getClassGroupsArrayList() throws SQLException {
+    public ArrayList<ClassGroup> getClassGroupsArrayList() throws SQLException {
         return dbcomm.queryClassGroups();
     }
 

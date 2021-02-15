@@ -5,10 +5,12 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import main.classes.ClassGroup;
 import main.classes.Course;
 import main.sqlite.DatabaseCommunicaton;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class CoursesDataModel {
     DatabaseCommunicaton dbcomm = new DatabaseCommunicaton();
@@ -52,6 +54,10 @@ public class CoursesDataModel {
     public void deleteCourse(Long id) throws SQLException {
         dbcomm.deleteCourse(id);
         refreshCourses();
+    }
+
+    public ArrayList<Course> getCoursesArrayList() throws SQLException {
+        return dbcomm.queryCourses();
     }
 
 }

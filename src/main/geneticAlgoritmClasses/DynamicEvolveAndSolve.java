@@ -1,23 +1,38 @@
 package main.geneticAlgoritmClasses;
 
+import main.classes.*;
 import org.jgap.*;
 import org.jgap.impl.CrossoverOperator;
 import org.jgap.impl.DefaultConfiguration;
 import org.jgap.impl.MutationOperator;
 
-public class EvolveAndSolve {
+import java.util.ArrayList;
+import java.util.Map;
 
-    public static final double FITNESS_VALUE = 200;
-    static final int EVOLUTION_REVOLUTIONS = 40;
+public class DynamicEvolveAndSolve {
+
+    public static final double FITNESS_VALUE = 161;
+    static final int EVOLUTION_REVOLUTIONS = 500;
     static final int POPULATION_SIZE = 100;
+    public static  ArrayList<ClassGroup> classGroupsArrayList;
+    public static ArrayList<Course> coursesArrayList;
+    public static ArrayList<Lecturer> lecturersArrayList;
+    public static ArrayList<LectureHall> lectureHallsArrayList;
 
-    public static void execute() {
+    public static void execute(ArrayList<ClassGroup> classGroupsArrayList,
+                               ArrayList<Course> coursesArrayList, ArrayList<Lecturer> lecturersArrayList,
+                               ArrayList<LectureHall> lectureHallsArrayList) {
 
+        DynamicEvolveAndSolve.classGroupsArrayList = classGroupsArrayList;
+        DynamicEvolveAndSolve.coursesArrayList = coursesArrayList;
+        DynamicEvolveAndSolve.lecturersArrayList = lecturersArrayList;
+        DynamicEvolveAndSolve.lectureHallsArrayList = lectureHallsArrayList;
 
+        Configuration.reset();
         Configuration conf = new DefaultConfiguration();
 
-        Schedule fitnessFunction = new Schedule();
-
+        DynamicSchedule fitnessFunction = new DynamicSchedule();
+        
         try {
 
             conf.setFitnessFunction(fitnessFunction);
@@ -26,7 +41,7 @@ public class EvolveAndSolve {
             conf.setKeepPopulationSizeConstant(true);
             conf.setPreservFittestIndividual(true);
 
-            Chromosome chromosome = ChromosomeGeneration.setChromosomeForAllRandom(conf);
+            Chromosome chromosome = ChromosomeGeneration.setDynamicChromosome(conf, classGroupsArrayList, coursesArrayList, lecturersArrayList, lectureHallsArrayList);
             conf.setSampleChromosome(chromosome);
             conf.setPopulationSize(POPULATION_SIZE);
 
@@ -50,7 +65,7 @@ public class EvolveAndSolve {
             IChromosome theFittestOne = population.getFittestChromosome();
             System.out.println("Najbolje rješenje pronađeno nakon: " + evolucija + " evolucija");
             System.out.println("Fitness vrijednost: " + theFittestOne.getFitnessValue() + " \n ");
-            Schedule.printSchedule(new Schedule(theFittestOne));
+            DynamicSchedule.printSchedule(new DynamicSchedule(theFittestOne));
 
            /* Schedule s = new Schedule();
             s.finalEval(theFittestOne);*/

@@ -30,7 +30,6 @@ public class Schedule extends FitnessFunction implements IChromosome {
         this.lectures = lectures;
     }
 
-
     // A method for visualising a class instance in the console.
     public static void printSchedule(Schedule schedule) {
 
