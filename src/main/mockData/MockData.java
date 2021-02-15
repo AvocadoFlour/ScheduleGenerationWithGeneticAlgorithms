@@ -47,6 +47,6 @@ public class MockData {
 
     public ClassGroup classGroup1 = new ClassGroup(0L, 25, "1A", vocation1);
     public ClassGroup classGroup2 = new ClassGroup(1L, 35, "2A", vocation2);
-    public List<ClassGroup> classGroups = new ArrayList<>(Arrays.asList(classGroup1, classGroup2));
+    public ArrayList<ClassGroup> classGroups = new ArrayList<>(Arrays.asList(classGroup1, classGroup2));
 
 }

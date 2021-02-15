@@ -6,16 +6,15 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
 <BorderPane fx:id="mainWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.JavaFX.MainWindowController">
    <top>
       <MenuBar fx:id="menuBar" BorderPane.alignment="CENTER">
         <menus>
-          <Menu mnemonicParsing="false" text="File">
+          <Menu mnemonicParsing="false" text="Menu">
             <items>
-              <MenuItem fx:id="newLectureHallMenuItem" mnemonicParsing="false" text="null" />
+              <MenuItem fx:id="produceScheduleMenuItem" mnemonicParsing="false" text="Produce schedule" />
             </items>
           </Menu>
         </menus>
@@ -24,30 +23,30 @@
    <center>
       <TabPane prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
-            <Tab fx:id="coursesTab" text="Courses">
+            <Tab text="Courses">
                 <content>
-                    <fx:include fx:id="coursesTabController" source="courses/coursesTab.fxml" />
+                    <fx:include fx:id="coursesTab" source="courses/coursesTab.fxml" />
                 </content>
             </Tab>
-          <Tab fx:id="lectureHallsTab" text="Lecture halls">
+          <Tab text="Lecture halls">
             <content>
-                <fx:include fx:id="lectureHallsTabController" source="lecturesHalls/lectureHallsTab.fxml" />
+                <fx:include fx:id="lectureHallsTab" source="lectureHalls/lectureHallsTab.fxml" />
             </content>
           </Tab>
-            <Tab fx:id="lecturersTab" text="Lecturers">
+            <Tab text="Lecturers">
                 <content>
-                    <fx:include fx:id="lecturersTabController" source="lecturers/lecturersTab.fxml" />
+                    <fx:include fx:id="lecturersTab" source="lecturers/lecturersTab.fxml" />
                 </content>
             </Tab>
-            <Tab fx:id="vocationsTab" text="Vocations">
+            <Tab text="Vocations">
                 <content>
-                    <fx:include source="vocations/vocationsTab.fxml" fx:id="vocationsTabController"/>
+                    <fx:include fx:id="vocationsTab" source="vocations/vocationsTab.fxml" />
                 </content>
             </Tab>
-            <Tab fx:id="classGroupsTab" text="Class groups">
-                <!--<content>
-                    <fx:include source="classGroups/classGroupsTab.fxml" fx:id="classGroupsTabController"/>
-                </content>-->
+            <Tab text="Class groups">
+                <content>
+                    <fx:include fx:id="classGroupsTab" source="classGroups/classGroupsTab.fxml" />
+                </content>
             </Tab>
         </tabs>
          <BorderPane.margin>

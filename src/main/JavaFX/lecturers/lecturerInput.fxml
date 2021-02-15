@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane fx:id="lecturerInputWindow" prefHeight="170.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.JavaFX.lecturers.LecturersInputControler">
+<AnchorPane fx:id="lecturerInputWindow" prefHeight="170.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.JavaFX.lecturers.LecturerInputControler">
     <children>
       <StackPane prefHeight="40.0" prefWidth="200.0">
          <children>

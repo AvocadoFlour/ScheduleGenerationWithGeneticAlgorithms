@@ -11,6 +11,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import main.JavaFX.MainWindowController;
 import main.classes.Lecturer;
 
 import java.io.IOException;
@@ -18,19 +19,16 @@ import java.sql.SQLException;
 
 public class LecturersTabController {
 
-    private LecturersDataModel lecturersDataModel;
     @FXML
     private TableView<Lecturer> lecturersTableView;
     @FXML
     private Button addNewLecturerButton;
     @FXML
     private Button deleteLecturerButton;
-    private TableColumn<Lecturer, String> lecturerNameColumn;
-    private TableColumn<Lecturer, Integer> lecturerLastNameColumn;
-    private TableColumn<Lecturer, String> lecturerQualificationsColumn;
+    private LecturersDataModel lecturersDataModel;
+    private MainWindowController mainWindowController;
 
     public void initialize() throws SQLException {
-        initModel();
 
         deleteLecturerButton.setOnAction(actionEvent -> {
             Lecturer lecturer = lecturersTableView.getSelectionModel().getSelectedItem();
@@ -54,8 +52,8 @@ public class LecturersTabController {
             e.printStackTrace();
         }
 
-        LecturersInputControler lecturersInputControler = loader.getController();
-        lecturersInputControler.initModel(lecturersDataModel);
+        LecturerInputControler lecturerInputControler = loader.getController();
+        lecturerInputControler.initModel(lecturersDataModel);
         stage.setTitle("Lecturer Input");
         if (root!=null) {
             stage.setScene(new Scene(root));
@@ -70,14 +68,9 @@ public class LecturersTabController {
     }
 
     public void initModel() throws SQLException {
-        // ensure model is only set once:
-        if (this.lecturersDataModel != null) {
-            throw new IllegalStateException("Lecturers model can only be initialized once");
-        }
-        this.lecturersDataModel =new LecturersDataModel();
-        lecturerNameColumn = new TableColumn<>("Name");
-        lecturerLastNameColumn = new TableColumn<>("Last name");
-        lecturerQualificationsColumn = new TableColumn<>("Qualifications");
+        TableColumn<Lecturer, String> lecturerNameColumn = new TableColumn<>("Name");
+        TableColumn<Lecturer, Integer> lecturerLastNameColumn = new TableColumn<>("Last name");
+        TableColumn<Lecturer, String> lecturerQualificationsColumn = new TableColumn<>("Qualifications");
         lecturerNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         lecturerLastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         lecturerQualificationsColumn.setCellValueFactory(new PropertyValueFactory<>("qualifications"));
@@ -89,5 +82,11 @@ public class LecturersTabController {
         lecturersDataModel.loadLecturers();
         lecturersTableView.setItems(lecturersDataModel.getLecturersList());
     }
+
+    public void injectMainWindowController(MainWindowController mainWindowController) throws SQLException {
+        this.mainWindowController = mainWindowController;
+        this.lecturersDataModel = mainWindowController.getLecturersDataModel();
+        initModel();
+    };
 
 }

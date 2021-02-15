@@ -1,12 +1,12 @@
 package main.sqlite;
 
-import main.classes.Course;
-import main.classes.LectureHall;
-import main.classes.Lecturer;
-import main.classes.Vocation;
+import main.classes.*;
+import org.sqlite.SQLiteConfig;
 
 import javax.swing.*;
+import javax.swing.plaf.nimbus.State;
 
+import static java.lang.Math.sqrt;
 import static java.lang.Math.toIntExact;
 
 import java.sql.*;
@@ -16,10 +16,14 @@ import java.util.Map;
 
 public class DatabaseCommunicaton {
 
+    public static final String DB_URL = "jdbc:sqlite:database.db";
+
     private Connection connectToDatabase () throws SQLException {
-        String jdbcUrl = "jdbc:sqlite:database.db";
         Connection connection;
-        connection = DriverManager.getConnection(jdbcUrl);
+        SQLiteConfig config = new SQLiteConfig();
+        config.enforceForeignKeys(true);
+        // Turning on foreign key constraints https://stackoverflow.com/a/13377015/10299831
+        connection = DriverManager.getConnection(DB_URL,config.toProperties());
         return connection;
     }
 
@@ -72,8 +76,8 @@ public class DatabaseCommunicaton {
         Connection connection = connectToDatabase();
         String sql = "CREATE TABLE IF NOT EXISTS lecturers " +
                 "(lecturer_id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                " lecturer_name VARCHAR(20) UNIQUE NOT NULL, " +
-                " lecturer_last_name VARCHAR(20) UNIQUE NOT NULL," +
+                " lecturer_name VARCHAR(20) NOT NULL, " +
+                " lecturer_last_name VARCHAR(20) NOT NULL," +
                 " lecturer_qualifications INTEGER NOT NULL);";
         Statement statement = connection.createStatement();
         statement.executeUpdate(sql);
@@ -185,6 +189,7 @@ public class DatabaseCommunicaton {
         statement.executeUpdate(sql);
         connection.close();
     }
+
     public void addVocation (String vocationName, HashMap<Course, Integer> courseRequirements) throws SQLException {
         Connection connection = connectToDatabase();
         String sql = "INSERT INTO vocations (vocation_name) " +
@@ -195,6 +200,8 @@ public class DatabaseCommunicaton {
         //Getting the just created Vocation's table id
         ResultSet rs = statement.getGeneratedKeys();
         int vocationId = Integer.parseInt(rs.getString(1));
+
+        //Creating the vocations course requirement entries
         String sqlBuilder = "INSERT INTO vocation_course_requirements (vocation_id, course_id, hours_required) VALUES";
         StringBuilder sb = new StringBuilder();
         sb.append(sqlBuilder);
@@ -216,7 +223,7 @@ public class DatabaseCommunicaton {
         Statement statement = connection.createStatement();
         ResultSet rs = statement.executeQuery(query);
         while (rs.next()) {
-            Long vocationId = rs.getLong("vocation_id");
+            long vocationId = rs.getLong("vocation_id");
             String vocationName = rs.getString("vocation_name");
             HashMap<Course, Integer> courseRequirements = queryVocationsCourseRequirements(toIntExact(vocationId));
             Vocation v = new Vocation(vocationId,vocationName,courseRequirements);
@@ -224,6 +231,19 @@ public class DatabaseCommunicaton {
         }
         connection.close();
         return vocationsList;
+    }
+
+    public Vocation querySingleVocationWithIntegerId(int vocationId) throws SQLException {
+        Connection connection = connectToDatabase();
+        String query = "SELECT * FROM vocations WHERE vocation_id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setLong(1, vocationId);
+        ResultSet rs = preparedStatement.executeQuery();
+        rs.getLong("vocation_id");
+        String vocationName = rs.getString("vocation_name");
+        HashMap<Course, Integer> courseRequirements = queryVocationsCourseRequirements(toIntExact(vocationId));
+        connection.close();
+        return new Vocation(vocationId, vocationName, courseRequirements);
     }
 
     public void deleteVocation(Integer id) throws SQLException {
@@ -242,8 +262,8 @@ public class DatabaseCommunicaton {
     public void createVocationsCourseRequirementsTable() throws SQLException {
         Connection connection = connectToDatabase();
         String sql = "CREATE TABLE IF NOT EXISTS vocation_course_requirements " +
-                "(vocation_id INTEGER, " +
-                "course_id INTEGER, " +
+                "(vocation_id INTEGER NOT NULL, " +
+                "course_id INTEGER NOT NULL, " +
                 "hours_required INTEGER NOT NULL, " +
                 "FOREIGN KEY(vocation_id) REFERENCES vocations(vocation_id), " +
                 "FOREIGN KEY(course_id) REFERENCES courses(course_id));";
@@ -272,13 +292,53 @@ public class DatabaseCommunicaton {
 
     }
 
-    public void createClassGroupsTable() {
+    public void createClassGroupsTable() throws SQLException {
+        Connection connection = connectToDatabase();
+        String sql = "CREATE TABLE IF NOT EXISTS class_groups " +
+                "(class_group_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "class_group_identification VARCHAR(10) NOT NULL, " +
+                "vocation_id INTEGER NOT NULL, " +
+                "number_of_students INTEGER NOT NULL, " +
+                "FOREIGN KEY(vocation_id) REFERENCES vocations(vocation_id));";
+        Statement statement = connection.createStatement();
+        statement.executeUpdate(sql);
+        connection.close();
     }
 
-    public void addClassGroups () {
+    public void addClassGroup (String classGroupIdentification, int vocationId, int numberOfStudents) throws SQLException {
+        Connection connection = connectToDatabase();
+        String sql = "INSERT INTO class_groups (class_group_identification, vocation_id, number_of_students) VALUES " +
+                "('" + classGroupIdentification + "', '" + vocationId + "', '" + numberOfStudents + "');";
+        Statement statement = connection.createStatement();
+        statement.executeUpdate(sql);
+        connection.close();
     }
 
-    public void queryClassGroup () {
+    public ArrayList<ClassGroup> queryClassGroups () throws SQLException {
+        ArrayList<ClassGroup> classGroupsList = new ArrayList<>();
+        Connection connection = connectToDatabase();
+        String query = "SELECT * FROM class_groups";
+        Statement statement = connection.createStatement();
+        ResultSet rs = statement.executeQuery(query);
+        while (rs.next()) {
+            long classGroupId = rs.getLong("class_group_id");
+            int numberOfStudents = rs.getInt("number_of_students");
+            String classGroupIdentification = rs.getString("class_group_identification");
+            int vocationId = rs.getInt("vocation_id");
+            Vocation vocation = querySingleVocationWithIntegerId(vocationId);
+            classGroupsList.add(new ClassGroup(classGroupId, numberOfStudents, classGroupIdentification, vocation));
+        }
+        connection.close();
+        return classGroupsList;
+    }
+
+    public void deleteClassGroup(int classGroupId) throws SQLException {
+        Connection connection = connectToDatabase();
+        String classGroupDeleteSql = "DELETE FROM class_groups WHERE class_group_id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(classGroupDeleteSql);
+        preparedStatement.setInt(1, classGroupId);
+        preparedStatement.executeUpdate();
+        connection.close();
     }
 
 }

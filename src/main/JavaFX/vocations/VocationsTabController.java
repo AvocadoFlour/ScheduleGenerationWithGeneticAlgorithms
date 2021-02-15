@@ -1,6 +1,5 @@
 package main.JavaFX.vocations;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,16 +10,13 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import main.JavaFX.lecturesHalls.LectureHallInputController;
-import main.JavaFX.lecturesHalls.LectureHallsDataModel;
-import main.classes.LectureHall;
+import main.JavaFX.MainWindowController;
 import main.classes.Vocation;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 public class VocationsTabController {
-
 
     @FXML
     private Button createVocationButton;
@@ -31,14 +27,12 @@ public class VocationsTabController {
     @FXML
     private TableView<Vocation> vocationsTableView;
     private VocationsDataModel vocationsDataModel;
-    private TableColumn<Vocation, String> vocationNameColumn;
-    private TableColumn<Vocation, String> vocationsRequirementsColumn;
+    private MainWindowController mainWindowController;
 
     public void initialize() throws SQLException {
-        initModel();
 
         createVocationButton.setOnAction(actionEvent -> {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("vocationsInput.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("vocationInput.fxml"));
                 Stage stage = new Stage();
                 Parent root = null;
                 try {
@@ -68,20 +62,27 @@ public class VocationsTabController {
     }
 
     public void initModel() throws SQLException {
-        this.vocationsDataModel = new VocationsDataModel();
-        vocationNameColumn = new TableColumn<>("Vocation name");
-        vocationsRequirementsColumn = new TableColumn<>("Course requirements");
+        TableColumn<Vocation, String> vocationNameColumn = new TableColumn<>("Vocation name");
         vocationNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        TableColumn<Vocation, String> vocationsRequirementsColumn = new TableColumn<>("Course requirements");
         vocationsRequirementsColumn.setCellValueFactory(new PropertyValueFactory<>("courseRequirements"));
-        vocationsTableView.getColumns().add(0,vocationNameColumn);
+        vocationsTableView.getColumns().add(0, vocationNameColumn);
         vocationNameColumn.prefWidthProperty().bind(vocationsTableView.widthProperty().multiply(0.49));
         vocationNameColumn.setResizable(false);
-        vocationsTableView.getColumns().add(1,vocationsRequirementsColumn);
+        vocationsTableView.getColumns().add(1, vocationsRequirementsColumn);
         vocationsRequirementsColumn.prefWidthProperty().bind(vocationsTableView.widthProperty().multiply(0.49));
         vocationsRequirementsColumn.setResizable(false);
         vocationsTableView.getItems().clear();
         vocationsDataModel.loadVocations();
         vocationsTableView.setItems(vocationsDataModel.getVocationsList());
+    }
+
+    /* Služi za postavljanje mainControllera kao varijable ove klase te se na taj način ostvaruje interakcija s
+    */
+    public void injectMainWindowController(MainWindowController mainWindowController) throws SQLException {
+        this.mainWindowController = mainWindowController;
+        this.vocationsDataModel = mainWindowController.getVocationsDataModel();
+        initModel();
     }
 
 }

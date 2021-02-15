@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import main.JavaFX.courses.CoursesDataModel;
 import main.classes.Course;
 import main.classes.Vocation;
@@ -103,6 +104,11 @@ public class VocationsInputController {
             }
         }
         );
+
+        cancelButton.setOnAction(actionEvent -> {
+            Stage stage = (Stage) cancelButton.getScene().getWindow();
+            stage.close();
+        });
 
     }
 

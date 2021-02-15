@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 
 import java.sql.SQLException;
 
-public class CoursesInputController {
+public class CourseInputController {
 
     private CoursesDataModel coursesDataModel;
     @FXML

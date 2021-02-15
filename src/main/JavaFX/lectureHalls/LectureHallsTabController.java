@@ -1,4 +1,4 @@
-package main.JavaFX.lecturesHalls;
+package main.JavaFX.lectureHalls;
 
 
 import javafx.event.ActionEvent;
@@ -13,6 +13,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import main.JavaFX.MainWindowController;
 import main.classes.LectureHall;
 
 import java.io.IOException;
@@ -25,14 +26,10 @@ public class LectureHallsTabController {
     private Button addNewLectureHallButton;
     @FXML
     private Button deleteLectureHallButton;
-
-    private TableColumn<LectureHall, String> hallCodeColumn;
-    private TableColumn<LectureHall, Integer> hallCapacityColumn;
     private LectureHallsDataModel lectureHallsDataModel;
+    private MainWindowController mainWindowController;
 
     public void initialize() throws SQLException {
-
-        initModel();
 
         /**
          * Delete button functionality
@@ -109,13 +106,8 @@ public class LectureHallsTabController {
      * @throws SQLException
      */
     public void initModel() throws SQLException {
-        // ensure model is only set once:
-        if (this.lectureHallsDataModel != null) {
-            throw new IllegalStateException("Lecture halls model can only be initialized once");
-        }
-        this.lectureHallsDataModel =new LectureHallsDataModel();
-        hallCodeColumn = new TableColumn<>("Hall code");
-        hallCapacityColumn = new TableColumn<>("Hall capacity");
+        TableColumn<LectureHall, String> hallCodeColumn = new TableColumn<>("Hall code");
+        TableColumn<LectureHall, Integer> hallCapacityColumn = new TableColumn<>("Hall capacity");
         hallCodeColumn.setCellValueFactory(new PropertyValueFactory<>("hallCode"));
         hallCapacityColumn.setCellValueFactory(new PropertyValueFactory<>("capacity"));
         lectureHallsTableView.getColumns().add(0, hallCodeColumn);
@@ -125,5 +117,11 @@ public class LectureHallsTabController {
         lectureHallsDataModel.loadLectureHalls();
         lectureHallsTableView.setItems(lectureHallsDataModel.getLectureHallList());
     }
+
+    public void injectMainWindowController(MainWindowController mainWindowController) throws SQLException {
+        this.mainWindowController = mainWindowController;
+        this.lectureHallsDataModel = mainWindowController.getLectureHallsDataModel();
+        initModel();
+    };
 
 }

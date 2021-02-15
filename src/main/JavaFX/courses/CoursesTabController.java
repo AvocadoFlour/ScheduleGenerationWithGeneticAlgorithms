@@ -1,5 +1,6 @@
 package main.JavaFX.courses;
 
+import com.sun.tools.javac.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,9 +12,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import main.JavaFX.lecturers.LecturersInputControler;
+import main.JavaFX.MainWindowController;
 import main.classes.Course;
-import main.classes.Lecturer;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -27,15 +27,12 @@ public class CoursesTabController {
     private Button addNewCourseButton;
     @FXML
     private Button deleteLCourseButton;
-    private TableColumn<Course, String> courseNameColumn;
-    private TableColumn<Course, Integer> courseQualificationColumn;
+    private MainWindowController mainWindowController;
 
     public void initialize() throws SQLException {
-        initModel();
-        coursesDataModel.dbcomm.createCoursesTable();
 
         addNewCourseButton.setOnAction(actionEvent -> {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("coursesInput.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("courseInput.fxml"));
             Stage stage = new Stage();
             Parent root = null;
             try {
@@ -45,8 +42,8 @@ public class CoursesTabController {
                 e.printStackTrace();
             }
 
-            CoursesInputController coursesInputController = loader.getController();
-            coursesInputController.initModel(coursesDataModel);
+            CourseInputController courseInputController = loader.getController();
+            courseInputController.initModel(coursesDataModel);
 
             stage.setTitle("Course Input");
             if (root!=null) {
@@ -75,12 +72,8 @@ public class CoursesTabController {
     }
 
     private void initModel() throws SQLException {
-        if (this.coursesDataModel != null) {
-            throw new IllegalStateException("Courses model can only be initialized once");
-        }
-        this.coursesDataModel = new CoursesDataModel();
-        courseNameColumn = new TableColumn<>("Name");
-        courseQualificationColumn = new TableColumn<>("Teacher qualification");
+        TableColumn<Course, String> courseNameColumn = new TableColumn<>("Name");
+        TableColumn<Course, Integer> courseQualificationColumn = new TableColumn<>("Teacher qualification");
         courseNameColumn.setCellValueFactory(new PropertyValueFactory<>("courseName"));
         courseQualificationColumn.setCellValueFactory(new PropertyValueFactory<>("teacherQualification"));
         coursesTableView.getColumns().add(0, courseNameColumn);
@@ -89,5 +82,11 @@ public class CoursesTabController {
         coursesDataModel.loadCourses();
         coursesTableView.setItems(coursesDataModel.getCoursesList());
     }
+
+    public void injectMainWindowController(MainWindowController mainWindowController) throws SQLException {
+        this.mainWindowController = mainWindowController;
+        this.coursesDataModel = mainWindowController.getCoursesDataModel();
+        initModel();
+    };
 
 }

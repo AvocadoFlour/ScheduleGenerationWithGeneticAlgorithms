@@ -1,5 +1,6 @@
 package main.geneticAlgoritmClasses;
 
+import main.classes.ClassGroup;
 import main.mockData.MockData;
 import org.jgap.Chromosome;
 import org.jgap.Configuration;
@@ -7,8 +8,18 @@ import org.jgap.Gene;
 import org.jgap.InvalidConfigurationException;
 import org.jgap.impl.IntegerGene;
 
+import java.util.ArrayList;
+
 public class ChromosomeGeneration {
 
+  /*  public static Chromosome setDynamicChromosome(Configuration conf, ArrayList<ClassGroup> classGroupArrayList) throws InvalidConfigurationException {
+
+        Gene[] defaultGene = new Gene[chromosome_size];
+
+
+        return new Chromosome(conf, defaultGene);
+    }
+*/
     public static Chromosome setChromosomeForAllRandom(Configuration conf) throws InvalidConfigurationException {
 
         MockData md = new MockData();

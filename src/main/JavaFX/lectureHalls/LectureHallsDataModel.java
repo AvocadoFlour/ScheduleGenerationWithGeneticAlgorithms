@@ -1,4 +1,4 @@
-package main.JavaFX.lecturesHalls;
+package main.JavaFX.lectureHalls;
 
 import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;

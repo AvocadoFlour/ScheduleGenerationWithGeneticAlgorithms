@@ -1,4 +1,4 @@
-package main.JavaFX.lecturesHalls;
+package main.JavaFX.lectureHalls;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
