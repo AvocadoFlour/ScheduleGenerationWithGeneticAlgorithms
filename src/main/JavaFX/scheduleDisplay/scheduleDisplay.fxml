@@ -10,7 +10,14 @@
    <children>
       <HBox fx:id="scheduleHBox" prefHeight="600.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Pane fx:id="hoursPane" prefHeight="600.0" prefWidth="50.0" />
+            <Pane fx:id="hoursPane" prefHeight="600.0" prefWidth="50.0">
+               <children>
+                  <Label layoutX="16.0" layoutY="2.0" text="h">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+               </children></Pane>
             <Pane fx:id="mondayPane" prefHeight="600.0" prefWidth="200.0">
                <children>
                   <Label layoutX="65.0" layoutY="2.0" text="Monday">

@@ -31,7 +31,11 @@ public class ScheduleDisplayController {
     @FXML
     private Pane fridayPane;
 
+    private final int HEIGHT_OF_RECTANGLE_INPUT_AREA = 550;
+    private final double RATIO = ((double) 1/11);
+
     public void initialize() {
+        setUpHoursPane();
         // generate();
     }
 
@@ -43,6 +47,16 @@ public class ScheduleDisplayController {
         mondayPane.getChildren().add(rectangle);
         hoursPane.getChildren().add(rectangle);
         tuesdayPane.getChildren().add(rectangle);
+    }
+
+    private void setUpHoursPane() {
+        for (int i = 0; i<11; i++) {
+            Label hourLabel = new Label();
+            hourLabel.setText(String.valueOf(i+8));
+            hourLabel.setLayoutX(12);
+            hourLabel.setLayoutY(((RATIO*i)*HEIGHT_OF_RECTANGLE_INPUT_AREA)+50);
+            hoursPane.getChildren().add(hourLabel);
+        }
     }
 
     public void setDynamicScheduleItem(DynamicSchedule dynamicSchedule) {
@@ -67,16 +81,21 @@ public class ScheduleDisplayController {
                 int fromH = l.getFromH();
                 int toH = l.getToH();
                 int lectureDuration = toH-fromH;
-                double ratio = ((double) 1/17);
-                double rectangleHeight = ratio * lectureDuration * 950;
-                rectangle.setHeight(rectangleHeight-6);
+                double rectangleHeight = RATIO * lectureDuration * HEIGHT_OF_RECTANGLE_INPUT_AREA;
+                rectangle.setHeight(rectangleHeight-4);
                 rectangle.widthProperty().set(180);
                 rectangle.setStrokeType(StrokeType.CENTERED);
                 rectangle.setStroke(Color.BLACK);
                 rectangle.setX(10);
                 Label courseNameLabel = new Label();
+                courseNameLabel.setLayoutX(12);
                 courseNameLabel.setText(course);
-                courseNameLabel.setLayoutX(10);
+                Label fromToLabel = new Label();
+                fromToLabel.setLayoutX(12);
+                Label classIdentificationLabel = new Label();
+                classIdentificationLabel.setLayoutX(12);
+                classIdentificationLabel.setText(classIdentification);
+
 
                 // dailyStartH variable:
                 // Calculating the starting time of the lecture for any day. E.g. the genetic algorithm
@@ -84,41 +103,46 @@ public class ScheduleDisplayController {
                 // that is the time that the lecture will start on the next day, with the condition
                 // that the day has 8 hour slots available for scheduling lectures
                 int dailyStartH = fromH % 8;
-                rectangle.setY(((ratio*dailyStartH)*950)+50);
-                courseNameLabel.setLayoutY(((ratio*dailyStartH)*950)+50);
+                rectangle.setY(((RATIO*dailyStartH)*HEIGHT_OF_RECTANGLE_INPUT_AREA)+52);
+                courseNameLabel.setLayoutY(((RATIO*dailyStartH)*HEIGHT_OF_RECTANGLE_INPUT_AREA)+50);
+                int fromToLabelStartH = dailyStartH + 8;
+                fromToLabel.setText(fromToLabelStartH + " - " + (fromToLabelStartH+lectureDuration));
+                fromToLabel.setLayoutY(((RATIO*dailyStartH)*HEIGHT_OF_RECTANGLE_INPUT_AREA)+61);
+                classIdentificationLabel.setLayoutY(((RATIO*dailyStartH)*HEIGHT_OF_RECTANGLE_INPUT_AREA)+72);
 
                 int dayOfWeek = fromH/8;
                 switch (dayOfWeek) {
-                    case 0:
+                    case 0 -> {
                         mondayPane.getChildren().add(rectangle);
                         mondayPane.getChildren().add(courseNameLabel);
-                        break;
-                    case 1:
+                        mondayPane.getChildren().add(fromToLabel);
+                        mondayPane.getChildren().add(classIdentificationLabel);
+                    }
+                    case 1 -> {
                         tuesdayPane.getChildren().add(rectangle);
                         tuesdayPane.getChildren().add(courseNameLabel);
-                        break;
-                    case 2:
+                        tuesdayPane.getChildren().add(fromToLabel);
+                        tuesdayPane.getChildren().add(classIdentificationLabel);
+                    }
+                    case 2 -> {
                         wednesdayPane.getChildren().add(rectangle);
                         wednesdayPane.getChildren().add(courseNameLabel);
-                        break;
-                    case 3:
+                        wednesdayPane.getChildren().add(fromToLabel);
+                        wednesdayPane.getChildren().add(classIdentificationLabel);
+                    }
+                    case 3 -> {
                         thursdayPane.getChildren().add(rectangle);
                         thursdayPane.getChildren().add(courseNameLabel);
-                        break;
-                    case 4:
+                        thursdayPane.getChildren().add(fromToLabel);
+                        thursdayPane.getChildren().add(classIdentificationLabel);
+                    }
+                    case 4 -> {
                         fridayPane.getChildren().add(rectangle);
                         fridayPane.getChildren().add(courseNameLabel);
-                        break;
-                    case 5:
-                        fridayPane.getChildren().add(rectangle);
-                        Alert alert = new Alert(Alert.AlertType.WARNING);
-                        alert.setTitle("Pozvan poseban uvijet");
-                        alert.setHeaderText("Dan tjedna u switch-case je ispao 5");
-                        alert.setContentText("Treba bolje srediti ovo ");
-                        alert.showAndWait();
-                        break;
+                        fridayPane.getChildren().add(fromToLabel);
+                        fridayPane.getChildren().add(classIdentificationLabel);
                     }
-               System.out.println(l.getCourse().getCourseName() + " od " + fromH + " do " + toH + " Traje: " + lectureDuration);
+                }
             }
         }
     }

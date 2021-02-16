@@ -39,7 +39,7 @@ public class ChromosomeGeneration {
                 defaultGene[i] = new IntegerGene(conf, 0, lectureHallsArrayList.size()-1);
             } else {
                 // FromH gene
-                defaultGene[i] = new IntegerGene(conf, 0, 40);
+                defaultGene[i] = new IntegerGene(conf, 0, 39);
             }
         }
 
