@@ -95,13 +95,20 @@ public class ScheduleDisplayController {
                 rectangle.setStroke(Color.BLACK);
                 rectangle.setX(10);
                 Label courseNameLabel = new Label();
+                courseNameLabel.setTextFill(Color.WHITE);
                 courseNameLabel.setLayoutX(12);
-                courseNameLabel.setText(course);
+                courseNameLabel.setText("Course: " + course);
                 Label fromToLabel = new Label();
                 fromToLabel.setLayoutX(12);
-                Label classIdentificationLabel = new Label();
-                classIdentificationLabel.setLayoutX(12);
-                classIdentificationLabel.setText(classIdentification);
+                fromToLabel.setTextFill(Color.WHITE);
+                Label lecturerLabel = new Label();
+                lecturerLabel.setLayoutX(12);
+                lecturerLabel.setTextFill(Color.WHITE);
+                lecturerLabel.setText("Lecturer: " + l.getLecturer().getLastName() + " " + l.getLecturer().getName());
+                Label lectureHallLabel = new Label();
+                lectureHallLabel.setLayoutX(12);
+                lectureHallLabel.setTextFill(Color.WHITE);
+                lectureHallLabel.setText("Hall: " + l.getLectureHall().getHallCode());
 
 
                 // dailyStartH variable:
@@ -113,9 +120,10 @@ public class ScheduleDisplayController {
                 rectangle.setY(((RATIO*dailyStartH)*HEIGHT_OF_RECTANGLE_INPUT_AREA)+52);
                 courseNameLabel.setLayoutY(((RATIO*dailyStartH)*HEIGHT_OF_RECTANGLE_INPUT_AREA)+50);
                 int fromToLabelStartH = dailyStartH + 8;
-                fromToLabel.setText(fromToLabelStartH + " - " + (fromToLabelStartH+lectureDuration));
+                fromToLabel.setText("Time: " +  fromToLabelStartH + " - " + (fromToLabelStartH+lectureDuration));
                 fromToLabel.setLayoutY(((RATIO*dailyStartH)*HEIGHT_OF_RECTANGLE_INPUT_AREA)+61);
-                classIdentificationLabel.setLayoutY(((RATIO*dailyStartH)*HEIGHT_OF_RECTANGLE_INPUT_AREA)+72);
+                lecturerLabel.setLayoutY(((RATIO*dailyStartH)*HEIGHT_OF_RECTANGLE_INPUT_AREA)+72);
+                lectureHallLabel.setLayoutY(((RATIO*dailyStartH)*HEIGHT_OF_RECTANGLE_INPUT_AREA)+83);
 
                 int dayOfWeek = fromH/8;
                 switch (dayOfWeek) {
@@ -123,31 +131,36 @@ public class ScheduleDisplayController {
                         mondayPane.getChildren().add(rectangle);
                         mondayPane.getChildren().add(courseNameLabel);
                         mondayPane.getChildren().add(fromToLabel);
-                        mondayPane.getChildren().add(classIdentificationLabel);
+                        mondayPane.getChildren().add(lecturerLabel);
+                        mondayPane.getChildren().add(lectureHallLabel);
                     }
                     case 1 -> {
                         tuesdayPane.getChildren().add(rectangle);
                         tuesdayPane.getChildren().add(courseNameLabel);
                         tuesdayPane.getChildren().add(fromToLabel);
-                        tuesdayPane.getChildren().add(classIdentificationLabel);
+                        tuesdayPane.getChildren().add(lecturerLabel);
+                        tuesdayPane.getChildren().add(lectureHallLabel);
                     }
                     case 2 -> {
                         wednesdayPane.getChildren().add(rectangle);
                         wednesdayPane.getChildren().add(courseNameLabel);
                         wednesdayPane.getChildren().add(fromToLabel);
-                        wednesdayPane.getChildren().add(classIdentificationLabel);
+                        wednesdayPane.getChildren().add(lecturerLabel);
+                        wednesdayPane.getChildren().add(lectureHallLabel);
                     }
                     case 3 -> {
                         thursdayPane.getChildren().add(rectangle);
                         thursdayPane.getChildren().add(courseNameLabel);
                         thursdayPane.getChildren().add(fromToLabel);
-                        thursdayPane.getChildren().add(classIdentificationLabel);
+                        thursdayPane.getChildren().add(lecturerLabel);
+                        thursdayPane.getChildren().add(lectureHallLabel);
                     }
                     case 4 -> {
                         fridayPane.getChildren().add(rectangle);
                         fridayPane.getChildren().add(courseNameLabel);
                         fridayPane.getChildren().add(fromToLabel);
-                        fridayPane.getChildren().add(classIdentificationLabel);
+                        fridayPane.getChildren().add(lecturerLabel);
+                        fridayPane.getChildren().add(lectureHallLabel);
                     }
                 }
             }

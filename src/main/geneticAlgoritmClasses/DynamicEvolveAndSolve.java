@@ -67,7 +67,7 @@ public class DynamicEvolveAndSolve {
             System.out.println("Najbolje rješenje pronađeno nakon: " + evolucija + " evolucija");
             System.out.println("Fitness vrijednost: " + theFittestOne.getFitnessValue() + " \n ");
             result = new DynamicSchedule(theFittestOne);
-            DynamicSchedule.printSchedule(result);
+            //DynamicSchedule.printSchedule(result);
 
         } catch (InvalidConfigurationException e) {
             e.printStackTrace();
