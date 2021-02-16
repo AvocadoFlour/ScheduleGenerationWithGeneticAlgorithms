@@ -5,6 +5,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import main.classes.ClassGroup;
@@ -56,6 +57,12 @@ public class ScheduleDisplayController {
             hourLabel.setLayoutX(12);
             hourLabel.setLayoutY(((RATIO*i)*HEIGHT_OF_RECTANGLE_INPUT_AREA)+50);
             hoursPane.getChildren().add(hourLabel);
+            Line line = new Line();
+            line.setStartX(50);
+            line.setStartY(((RATIO*i)*HEIGHT_OF_RECTANGLE_INPUT_AREA)+50);
+            line.setEndX(1000);
+            line.setEndY(((RATIO*i)*HEIGHT_OF_RECTANGLE_INPUT_AREA)+50);
+            hoursPane.getChildren().add(line);
         }
     }
 
@@ -83,7 +90,7 @@ public class ScheduleDisplayController {
                 int lectureDuration = toH-fromH;
                 double rectangleHeight = RATIO * lectureDuration * HEIGHT_OF_RECTANGLE_INPUT_AREA;
                 rectangle.setHeight(rectangleHeight-4);
-                rectangle.widthProperty().set(180);
+                rectangle.widthProperty().set(170);
                 rectangle.setStrokeType(StrokeType.CENTERED);
                 rectangle.setStroke(Color.BLACK);
                 rectangle.setX(10);
