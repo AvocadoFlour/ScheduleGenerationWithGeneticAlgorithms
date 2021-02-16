@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class DynamicEvolveAndSolve {
 
-    public static final double FITNESS_VALUE = 161;
+    public static final double FINAL_FITNESS_VALUE = 500;
     static final int EVOLUTION_REVOLUTIONS = 500;
     static final int POPULATION_SIZE = 100;
     public static  ArrayList<ClassGroup> classGroupsArrayList;
@@ -38,8 +38,8 @@ public class DynamicEvolveAndSolve {
             conf.setFitnessFunction(fitnessFunction);
             conf.addGeneticOperator(new CrossoverOperator(conf));
             conf.addGeneticOperator(new MutationOperator(conf));
-            conf.setKeepPopulationSizeConstant(true);
-            conf.setPreservFittestIndividual(true);
+            conf.setKeepPopulationSizeConstant(false);
+            conf.setPreservFittestIndividual(false);
 
             Chromosome chromosome = ChromosomeGeneration.setDynamicChromosome(conf, classGroupsArrayList, coursesArrayList, lecturersArrayList, lectureHallsArrayList);
             conf.setSampleChromosome(chromosome);
@@ -54,8 +54,7 @@ public class DynamicEvolveAndSolve {
                 evolucija += 1;
                 population.evolve();
                 IChromosome theFittestOne = population.getFittestChromosome();
-
-                if (theFittestOne.getFitnessValue() == FITNESS_VALUE) {
+                if (theFittestOne.getFitnessValue() == FINAL_FITNESS_VALUE) {
                     break;
                 }
 
@@ -63,6 +62,7 @@ public class DynamicEvolveAndSolve {
             long finishTime = System.currentTimeMillis();
             System.out.println((double) (finishTime - startTime) / 1000 + " sekundi");
             IChromosome theFittestOne = population.getFittestChromosome();
+            DynamicSchedule.finalEvaluate(theFittestOne);
             System.out.println("Najbolje rješenje pronađeno nakon: " + evolucija + " evolucija");
             System.out.println("Fitness vrijednost: " + theFittestOne.getFitnessValue() + " \n ");
             DynamicSchedule.printSchedule(new DynamicSchedule(theFittestOne));

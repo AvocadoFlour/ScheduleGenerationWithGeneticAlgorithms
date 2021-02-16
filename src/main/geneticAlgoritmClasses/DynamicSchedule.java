@@ -121,7 +121,7 @@ public class DynamicSchedule extends FitnessFunction implements IChromosome {
             vocationCourseRequirements.put(cg.getClassIdentification(), tempMap);
         }
 
-        double fitnessValue = 161;
+        double fitnessValue = 500;
 
         for (int i = 0; i < test.lectures.size(); i++) {
 
@@ -129,7 +129,7 @@ public class DynamicSchedule extends FitnessFunction implements IChromosome {
             if(vocationCourseRequirements.get(test.lectures.get(i).getClassGroup().getClassIdentification()).containsKey(test.lectures.get(i).getCourse())) {
                 vocationCourseRequirements.get(test.lectures.get(i).getClassGroup().getClassIdentification()).remove(test.lectures.get(i).getCourse());
             } else {
-                fitnessValue -= 1;
+                fitnessValue -= 10;
             }
 
             /*// Check if appointed lecturer has the necessary qualification
@@ -142,7 +142,7 @@ public class DynamicSchedule extends FitnessFunction implements IChromosome {
             // Checking if lectureHall has sufficient capacity.
             if (test.lectures.get(i).getLectureHall().getCapacity() < test.lectures.get(i).getClassGroup().getNumberOfStudents()) {
                 // DEDUCT POINTS: The appointed lectureHall does not have the minimum capacity required to hold the entire classGroup
-                fitnessValue -= 1;
+                fitnessValue -= 10;
             }
             for (int j = 0; j < test.lectures.size(); j++) {
 
@@ -152,7 +152,7 @@ public class DynamicSchedule extends FitnessFunction implements IChromosome {
                 int e2 = test.lectures.get(j).getToH();
 
                 // Finding lectures which have overlapping time-frames
-                if (!((s1 < e2 && e1 < s2) || (s1 > e2 && e1 > s2)) && test.lectures.get(i) != test.lectures.get(j)) {
+                if (!((s1 < e2 && e1 <= s2) || (s1 >= e2 && e1 > s2)) && test.lectures.get(i) != test.lectures.get(j)) {
 
                     // Checking if two lectures are scheduled in a single lectureHall during overlapping time-frames.
                     if (test.lectures.get(i).getLectureHall() == test.lectures.get(j).getLectureHall()) {
@@ -174,8 +174,100 @@ public class DynamicSchedule extends FitnessFunction implements IChromosome {
                 }
             }
         }
+        // Check if every vocation has the needed amount of courses scheduled
+        for (Map.Entry<String, HashMap<Course, Integer>> entry1 : vocationCourseRequirements.entrySet()) {
+            for (Map.Entry<Course, Integer> entry2 : entry1.getValue().entrySet()) {
+                fitnessValue -= 1;
+            }
+        }
+
+        return fitnessValue;
+    }
+
+    public static double finalEvaluate(IChromosome chromosome) {
+
+        DynamicSchedule test = new DynamicSchedule(chromosome);
+
+        HashMap<String,HashMap<Course,Integer>> vocationCourseRequirements = new HashMap<>();
+        //This complicated method is necessary in order to avoid copying by reference
+        for(ClassGroup cg : DynamicEvolveAndSolve.classGroupsArrayList) {
+            HashMap<Course, Integer> tempMap = new HashMap<>();
+            for (Map.Entry<Course, Integer> entry : cg.getVocation().getCourseRequirements().entrySet()) {
+                tempMap.put(entry.getKey(), entry.getValue());
+            }
+            vocationCourseRequirements.put(cg.getClassIdentification(), tempMap);
+        }
+
+        double fitnessValue = 500;
+
+        for (int i = 0; i < test.lectures.size(); i++) {
+
+            // Check if an already scheduled course was scheduled again
+            if(vocationCourseRequirements.get(test.lectures.get(i).getClassGroup().getClassIdentification()).containsKey(test.lectures.get(i).getCourse())) {
+                vocationCourseRequirements.get(test.lectures.get(i).getClassGroup().getClassIdentification()).remove(test.lectures.get(i).getCourse());
+            } else {
+                System.out.println("Grupi: " +  test.lectures.get(i).getClassGroup().getClassIdentification() + " je nastava za predmet " + test.lectures.get(i).getCourse()
+                + " dodjeljena 2 puta");
+                fitnessValue -= 10;
+            }
+
+            /*// Check if appointed lecturer has the necessary qualification
+            int courseQualification = test.lectures.get(i).getCourse().getTeacherQualification();
+            boolean contains = IntStream.of(test.lectures.get(i).getLecturer().getQualifications()).anyMatch(x -> x == courseQualification);
+            if (!contains) {
+                fitnessValue -= 1;
+            }*/
+
+            // Checking if lectureHall has sufficient capacity.
+            if (test.lectures.get(i).getLectureHall().getCapacity() < test.lectures.get(i).getClassGroup().getNumberOfStudents()) {
+                // DEDUCT POINTS: The appointed lectureHall does not have the minimum capacity required to hold the entire classGroup
+                System.out.println("The appointed lecture hall has insufficient capacity");
+                fitnessValue -= 1;
+            }
+            for (int j = 0; j < test.lectures.size(); j++) {
+
+                int s1 = test.lectures.get(i).getFromH();
+                int e1 = test.lectures.get(i).getToH();
+                int s2 = test.lectures.get(j).getFromH();
+                int e2 = test.lectures.get(j).getToH();
+
+                // Finding lectures which have overlapping time-frames
+                if (!((s1 < e2 && e1 <= s2) || (s1 >= e2 && e1 > s2)) && test.lectures.get(i) != test.lectures.get(j)) {
+
+                    // Checking if two lectures are scheduled in a single lectureHall during overlapping time-frames.
+                    if (test.lectures.get(i).getLectureHall() == test.lectures.get(j).getLectureHall()) {
+                        // DEDUCT POINTS: The appointed lectureHall has two lectures scheduled during overlapping timeframes
+                        System.out.println("Two lcetures in single lectureHall at the same time");
+                        fitnessValue -= 1;
+                    }
+
+                    // Checking if a lecturer has two lectures scheduled during overlapping time-frames.
+                    if (test.lectures.get(i).getLecturer() == test.lectures.get(j).getLecturer()) {
+                        // DEDUCT POINTS: The appointed lecturer has two lectures scheduled during overlapping timeframes
+                        System.out.println("One lecturer has two lectures at the same time. " );
+                        fitnessValue -= 1;
+                    }
+
+                    // Checking if a classGroup has two lectures scheduled during overlapping time-frames.
+                    if (test.lectures.get(i).getClassGroup() == test.lectures.get(j).getClassGroup()) {
+                        // DEDUCT POINTS: The appointed lecturer has two lectures scheduled during overlapping timeframes
+                        System.out.println("The classGroup " + test.lectures.get(i).getClassGroup().getClassIdentification() + " has two lectures " +
+                                "at the same time, those lectures are: " + test.lectures.get(i).getCourse().getCourseName() +
+                                " and " + test.lectures.get(j).getCourse().getCourseName());
+                        fitnessValue -= 1;
+                    }
+                }
+            }
+        }
 
         // Check if every vocation has the needed amount of courses scheduled
+        for (Map.Entry<String, HashMap<Course, Integer>> entry1 : vocationCourseRequirements.entrySet()) {
+            for (Map.Entry<Course, Integer> entry2 : entry1.getValue().entrySet()) {
+                System.out.println("Nedostatak predavanja");
+                fitnessValue -= 1;
+            }
+        }
+
 
         return fitnessValue;
     }
