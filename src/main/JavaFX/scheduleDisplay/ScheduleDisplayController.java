@@ -2,9 +2,11 @@ package main.JavaFX.scheduleDisplay;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 import main.classes.ClassGroup;
 import main.classes.Lecture;
 import main.geneticAlgoritmClasses.DynamicSchedule;
@@ -65,29 +67,47 @@ public class ScheduleDisplayController {
                 int fromH = l.getFromH();
                 int toH = l.getToH();
                 int lectureDuration = toH-fromH;
-                double ratio = ((double) 1/12);
+                double ratio = ((double) 1/17);
                 double rectangleHeight = ratio * lectureDuration * 950;
-                rectangle.setHeight(rectangleHeight);
+                rectangle.setHeight(rectangleHeight-6);
                 rectangle.widthProperty().set(180);
-                rectangle.
+                rectangle.setStrokeType(StrokeType.CENTERED);
+                rectangle.setStroke(Color.BLACK);
                 rectangle.setX(10);
-                rectangle.setY((ratio*fromH)+50);
+                Label courseNameLabel = new Label();
+                courseNameLabel.setText(course);
+                courseNameLabel.setLayoutX(10);
+
+                // dailyStartH variable:
+                // Calculating the starting time of the lecture for any day. E.g. the genetic algorithm
+                // could provide the starting value of 12h, which needs to be converted into 4 because
+                // that is the time that the lecture will start on the next day, with the condition
+                // that the day has 8 hour slots available for scheduling lectures
+                int dailyStartH = fromH % 8;
+                rectangle.setY(((ratio*dailyStartH)*950)+50);
+                courseNameLabel.setLayoutY(((ratio*dailyStartH)*950)+50);
+
                 int dayOfWeek = fromH/8;
                 switch (dayOfWeek) {
                     case 0:
                         mondayPane.getChildren().add(rectangle);
+                        mondayPane.getChildren().add(courseNameLabel);
                         break;
                     case 1:
                         tuesdayPane.getChildren().add(rectangle);
+                        tuesdayPane.getChildren().add(courseNameLabel);
                         break;
                     case 2:
                         wednesdayPane.getChildren().add(rectangle);
+                        wednesdayPane.getChildren().add(courseNameLabel);
                         break;
                     case 3:
                         thursdayPane.getChildren().add(rectangle);
+                        thursdayPane.getChildren().add(courseNameLabel);
                         break;
                     case 4:
                         fridayPane.getChildren().add(rectangle);
+                        fridayPane.getChildren().add(courseNameLabel);
                         break;
                     case 5:
                         fridayPane.getChildren().add(rectangle);
