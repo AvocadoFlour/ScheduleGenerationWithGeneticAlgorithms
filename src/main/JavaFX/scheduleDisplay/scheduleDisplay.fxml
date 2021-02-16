@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.JavaFX.scheduleDisplay.ScheduleDisplayController">
+   <children>
+      <HBox fx:id="scheduleHBox" prefHeight="600.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Pane fx:id="hoursPane" prefHeight="600.0" prefWidth="50.0" />
+            <Pane fx:id="mondayPane" prefHeight="600.0" prefWidth="200.0">
+               <children>
+                  <Label layoutX="65.0" layoutY="2.0" text="Monday">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children></Pane>
+            <Pane fx:id="tuesdayPane" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Label layoutX="65.0" layoutY="2.0" text="Tuesday">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children></Pane>
+            <Pane fx:id="wednesdayPane" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Label layoutX="52.0" layoutY="2.0" text="Wednesday">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children></Pane>
+            <Pane fx:id="thursdayPane" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Label layoutX="62.0" layoutY="2.0" text="Thursday">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children></Pane>
+            <Pane fx:id="fridayPane" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Label layoutX="73.0" layoutY="2.0" text="Friday">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children></Pane>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

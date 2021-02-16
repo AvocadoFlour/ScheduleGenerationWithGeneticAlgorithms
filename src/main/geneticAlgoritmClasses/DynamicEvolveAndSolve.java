@@ -19,10 +19,11 @@ public class DynamicEvolveAndSolve {
     public static ArrayList<Lecturer> lecturersArrayList;
     public static ArrayList<LectureHall> lectureHallsArrayList;
 
-    public static void execute(ArrayList<ClassGroup> classGroupsArrayList,
+    public static DynamicSchedule execute(ArrayList<ClassGroup> classGroupsArrayList,
                                ArrayList<Course> coursesArrayList, ArrayList<Lecturer> lecturersArrayList,
                                ArrayList<LectureHall> lectureHallsArrayList) {
 
+        DynamicSchedule result = null;
         DynamicEvolveAndSolve.classGroupsArrayList = classGroupsArrayList;
         DynamicEvolveAndSolve.coursesArrayList = coursesArrayList;
         DynamicEvolveAndSolve.lecturersArrayList = lecturersArrayList;
@@ -65,13 +66,12 @@ public class DynamicEvolveAndSolve {
             DynamicSchedule.finalEvaluate(theFittestOne);
             System.out.println("Najbolje rješenje pronađeno nakon: " + evolucija + " evolucija");
             System.out.println("Fitness vrijednost: " + theFittestOne.getFitnessValue() + " \n ");
-            DynamicSchedule.printSchedule(new DynamicSchedule(theFittestOne));
-
-           /* Schedule s = new Schedule();
-            s.finalEval(theFittestOne);*/
+            result = new DynamicSchedule(theFittestOne);
+            DynamicSchedule.printSchedule(result);
 
         } catch (InvalidConfigurationException e) {
             e.printStackTrace();
         }
+        return result;
     }
 }
