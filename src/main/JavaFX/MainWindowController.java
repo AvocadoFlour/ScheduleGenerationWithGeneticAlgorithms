@@ -30,9 +30,7 @@ import main.geneticAlgoritmClasses.DynamicSchedule;
 import java.io.*;
 import java.sql.Array;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class MainWindowController {
 
@@ -108,7 +106,7 @@ public class MainWindowController {
 
         retrieveResultsMenuItem.setOnAction(actionEvent -> {
             try {
-                calculateStatistics(readFile());
+                calculateDistribution(readFile());
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
@@ -142,6 +140,41 @@ public class MainWindowController {
         System.out.println(timeCounter500 + " : Total 500 time. " + timeCounter500/(retrievedResults.size()-failedCounter) + " : Average time per 500 sample.");
         System.out.println(fitnessCounter/retrievedResults.size() + " : Average fitness achieved (per sample)");
         System.out.println(failedCounter + " : Number of failures.");
+
+    }
+
+    private void calculateDistribution(ArrayList<LinkedList<Number>> retrievedResults) {
+        ArrayList<Integer> numberOfEvolutionsFor500Solutions = new ArrayList<>();
+        int maximumEvolutions = 0;
+        int minimumEvolutions = 500;
+        for (LinkedList<Number> ll : retrievedResults) {
+            if ((double) ll.get(2) == 500) {
+                System.out.println(ll.get(0));
+                numberOfEvolutionsFor500Solutions.add((int)ll.get(0));
+                if(minimumEvolutions > (int) ll.get(0)){
+                    minimumEvolutions = (int) ll.get(0);
+                }
+                if(maximumEvolutions < (int) ll.get(0)){
+                    maximumEvolutions = (int) ll.get(0);
+                }
+            }
+        }
+        HashMap<Integer, Integer> distributionMap = new HashMap<>();
+        double ratio = ((double)(maximumEvolutions-minimumEvolutions)/20);
+
+        for (int i : numberOfEvolutionsFor500Solutions) {
+            int integerValue = (int)((i-minimumEvolutions)/ratio)/1;
+            if(integerValue== 20) {
+                System.out.println(i + " evo 6 vrijednosti");
+            }
+            distributionMap.putIfAbsent(integerValue,0);
+            int currentAmountOfResultsInTheSpectrum = distributionMap.get(integerValue);
+            currentAmountOfResultsInTheSpectrum += 1;
+            distributionMap.put(integerValue,currentAmountOfResultsInTheSpectrum);
+        }
+       /* for (Map.Entry<Integer,Integer> e : distributionMap.entrySet()) {
+            System.out.println("U spektru: " + e.getKey() + " se nalazi " + e.getValue() + " rezultata.");
+        }*/
     }
 
     private ArrayList<LinkedList<Number>> readFile() throws IOException, ClassNotFoundException {
