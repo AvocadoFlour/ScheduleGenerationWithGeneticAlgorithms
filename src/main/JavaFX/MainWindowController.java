@@ -86,7 +86,7 @@ public class MainWindowController {
 
         testiranjeCrtanjaRasporeda.setOnAction(actionEvent -> {
             try {
-                final int NUMBER_OF_SAMPLES = 10;
+                final int NUMBER_OF_SAMPLES = 1000;
                 ArrayList<LinkedList<Number>> allResults = new ArrayList<>();
                 for(int i = 0; i<NUMBER_OF_SAMPLES; i++) {
                     LinkedList<Number> result = DynamicEvolveAndSolve.executeMeasuringPerformance(classGroupDataModel.getClassGroupsArrayList(),

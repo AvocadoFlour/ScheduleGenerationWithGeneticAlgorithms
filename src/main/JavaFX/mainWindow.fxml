@@ -23,37 +23,25 @@
       </MenuBar>
    </top>
    <center>
-      <TabPane prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
-        <tabs>
-            <Tab text="Courses">
-                <content>
-                    <fx:include fx:id="coursesTab" source="courses/coursesTab.fxml" />
-                </content>
-            </Tab>
-          <Tab text="Lecture halls">
-            <content>
-                <fx:include fx:id="lectureHallsTab" source="lectureHalls/lectureHallsTab.fxml" />
-            </content>
-          </Tab>
-            <Tab text="Lecturers">
-                <content>
-                    <fx:include fx:id="lecturersTab" source="lecturers/lecturersTab.fxml" />
-                </content>
-            </Tab>
-            <Tab text="Vocations">
-                <content>
-                    <fx:include fx:id="vocationsTab" source="vocations/vocationsTab.fxml" />
-                </content>
-            </Tab>
-            <Tab text="Class groups">
-                <content>
-                    <fx:include fx:id="classGroupsTab" source="classGroups/classGroupsTab.fxml" />
-                </content>
-            </Tab>
-        </tabs>
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
-      </TabPane>
+       <TabPane prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+           <BorderPane.margin>
+               <Insets/>
+           </BorderPane.margin>
+           <Tab text="Courses">
+               <fx:include fx:id="coursesTab" source="courses/coursesTab.fxml"/>
+           </Tab>
+           <Tab text="Lecture halls">
+               <fx:include fx:id="lectureHallsTab" source="lectureHalls/lectureHallsTab.fxml"/>
+           </Tab>
+           <Tab text="Lecturers">
+               <fx:include fx:id="lecturersTab" source="lecturers/lecturersTab.fxml"/>
+           </Tab>
+           <Tab text="Vocations">
+               <fx:include fx:id="vocationsTab" source="vocations/vocationsTab.fxml"/>
+           </Tab>
+           <Tab text="Class groups">
+               <fx:include fx:id="classGroupsTab" source="classGroups/classGroupsTab.fxml"/>
+           </Tab>
+       </TabPane>
    </center>
 </BorderPane>
