@@ -162,8 +162,8 @@ public class MainWindowController {
             e.printStackTrace();
         }
         ScheduleDisplayController scheduleDisplayController = loader.getController();
+        scheduleDisplayController.setThisStage(stage);
         scheduleDisplayController.setDynamicScheduleItem(dynamicSchedule);
-        stage.setTitle("Generated schedule");
         stage.setScene(new Scene(root));
         stage.setResizable(false);
 

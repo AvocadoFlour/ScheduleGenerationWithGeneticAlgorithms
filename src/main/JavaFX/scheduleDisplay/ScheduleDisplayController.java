@@ -1,7 +1,10 @@
 package main.JavaFX.scheduleDisplay;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -11,16 +14,19 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
+import javafx.stage.Stage;
 import main.classes.ClassGroup;
 import main.classes.Lecture;
 import main.geneticAlgoritmClasses.DynamicSchedule;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ScheduleDisplayController {
 
+    private Stage thisStage;
     @FXML
     private Menu changeClassGroupMenu;
     @FXML
@@ -42,6 +48,10 @@ public class ScheduleDisplayController {
 
     public void initialize() {
         setUpHoursPane();
+    }
+
+    public void setThisStage(Stage thisStage) {
+        this.thisStage=thisStage;
     }
 
     private void setUpHoursPane() {
@@ -74,7 +84,12 @@ public class ScheduleDisplayController {
     }
 
     private void setChangeClassGroup(ClassGroup classGroup) {
+        setStageTitle(classGroup.getClassIdentification());
         drawSchedule(classGroupsHashMap.get(classGroup));
+    }
+
+    private void setStageTitle(String string) {
+        thisStage.setTitle("Class group: " + string);
     }
 
     public void setDynamicScheduleItem(DynamicSchedule dynamicSchedule) {
@@ -104,7 +119,9 @@ public class ScheduleDisplayController {
         fridayPane.getChildren().removeIf(r -> r instanceof Rectangle);
     }
 
+
     public void drawSchedule(ArrayList<Lecture> e) {
+        setStageTitle(e.get(0).getClassGroup().getClassIdentification());
         for (Lecture l : e) {
             Color textColor = Color.valueOf("#fffaf0");
             Rectangle rectangle = new Rectangle();
