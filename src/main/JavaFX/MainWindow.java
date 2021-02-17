@@ -15,12 +15,10 @@ public class MainWindow extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
 
-        /*EvolveAndSolve e = new EvolveAndSolve();
-        e.execute();*/
-
     }
 
     public static void main(String[] args) {
         launch(args);
     }
+
 }

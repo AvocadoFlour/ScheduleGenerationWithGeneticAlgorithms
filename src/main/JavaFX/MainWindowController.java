@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
+import javafx.scene.shape.Line;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import main.JavaFX.classGroups.ClassGroupDataModel;
@@ -26,12 +27,17 @@ import main.classes.Lecturer;
 import main.geneticAlgoritmClasses.DynamicEvolveAndSolve;
 import main.geneticAlgoritmClasses.DynamicSchedule;
 
-import java.io.IOException;
+import java.io.*;
+import java.sql.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MainWindowController {
 
+    @FXML
+    private MenuItem retrieveResultsMenuItem;
     @FXML
     MenuItem produceScheduleMenuItem;
     @FXML
@@ -79,21 +85,67 @@ public class MainWindowController {
         });
 
         testiranjeCrtanjaRasporeda.setOnAction(actionEvent -> {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("scheduleDisplay/scheduleDisplay.fxml"));
-            Stage stage = new Stage();
-            Parent root = null;
             try {
-                root = loader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            stage.setTitle("Generated schedule");
-            stage.setScene(new Scene(root));
-            stage.setResizable(false);
+                final int NUMBER_OF_SAMPLES = 5000;
+                ArrayList<LinkedList<Number>> allResults = new ArrayList<>();
+                for(int i = 0; i<NUMBER_OF_SAMPLES; i++) {
+                    LinkedList<Number> result = DynamicEvolveAndSolve.executeMeasuringPerformance(classGroupDataModel.getClassGroupsArrayList(),
+                            coursesDataModel.getCoursesArrayList(), lecturersDataModel.getLecturersArrayList(),
+                            lectureHallsDataModel.getClassGroupsArrayList());
+                    allResults.add(result);
+                }
+                int evolutionsCounter = 0;
+                int evolutionsCounter500 = 0;
+                double timeCounter = 0;
+                double timeCounter500 = 0;
+                double fitnessCounter = 0;
+                int failedCounter = 0;
+                for (LinkedList<Number> ll : allResults) {
+                    evolutionsCounter += (int) ll.get(0);
+                    timeCounter += (double) ll.get(1);
+                    fitnessCounter += (double) ll.get(2);
+                    if ((double) ll.get(2) <500) {
+                        failedCounter += 1;
+                    } else {
+                        evolutionsCounter500 += (int) ll.get(0);
+                        timeCounter500 += (double) ll.get(1);
+                    }
+                }
+                System.out.println(evolutionsCounter + " : Total evolutions. " + evolutionsCounter/allResults.size() + " : Average evolutions per sample.");
+                System.out.println(timeCounter + " : Total time. " + timeCounter/allResults.size() + " : Average time per sample.");
+                System.out.println(evolutionsCounter500 + " : Total 500 evolutions. " + evolutionsCounter500/(allResults.size()-failedCounter) + " : Average evolutions per 500 sample.");
+                System.out.println(timeCounter500 + " : Total 500 time. " + timeCounter500/(allResults.size()-failedCounter) + " : Average time per 500 sample.");
+                System.out.println(fitnessCounter/allResults.size() + " : Average fitness achieved (per sample)");
+                System.out.println(failedCounter + " : Number of failures.");
 
-            stage.show();
+                FileOutputStream fos = new FileOutputStream("t.tmp");
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                oos.writeObject(allResults);
+                oos.close();
+
+            } catch (SQLException | IOException throwables) {
+                throwables.printStackTrace();
+            }
         });
 
+        retrieveResultsMenuItem.setOnAction(actionEvent -> {
+            try {
+                readFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
+
+    }
+
+    private void readFile() throws IOException, ClassNotFoundException {
+        FileInputStream fis = new FileInputStream("t.tmp");
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        ArrayList<Number> retrievedResulsts = (ArrayList<Number>) ois.readObject();
+        ois.close();
+        System.out.println(retrievedResulsts);
     }
 
     private void openScheduleDisplay(DynamicSchedule dynamicSchedule) {

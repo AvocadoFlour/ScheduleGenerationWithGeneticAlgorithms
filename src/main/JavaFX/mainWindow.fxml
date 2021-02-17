@@ -16,6 +16,7 @@
             <items>
               <MenuItem fx:id="produceScheduleMenuItem" mnemonicParsing="false" text="Produce schedule" />
                   <MenuItem fx:id="testiranjeCrtanjaRasporeda" mnemonicParsing="false" text="Testiranje" />
+                  <MenuItem fx:id="retrieveResultsMenuItem" mnemonicParsing="false" text="Retrieve results" />
             </items>
           </Menu>
         </menus>

@@ -3,10 +3,6 @@ package main.sqlite;
 import main.classes.*;
 import org.sqlite.SQLiteConfig;
 
-import javax.swing.*;
-import javax.swing.plaf.nimbus.State;
-
-import static java.lang.Math.sqrt;
 import static java.lang.Math.toIntExact;
 
 import java.sql.*;
