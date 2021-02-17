@@ -86,7 +86,7 @@ public class MainWindowController {
 
         testiranjeCrtanjaRasporeda.setOnAction(actionEvent -> {
             try {
-                final int NUMBER_OF_SAMPLES = 5000;
+                final int NUMBER_OF_SAMPLES = 10;
                 ArrayList<LinkedList<Number>> allResults = new ArrayList<>();
                 for(int i = 0; i<NUMBER_OF_SAMPLES; i++) {
                     LinkedList<Number> result = DynamicEvolveAndSolve.executeMeasuringPerformance(classGroupDataModel.getClassGroupsArrayList(),
@@ -94,29 +94,7 @@ public class MainWindowController {
                             lectureHallsDataModel.getClassGroupsArrayList());
                     allResults.add(result);
                 }
-                int evolutionsCounter = 0;
-                int evolutionsCounter500 = 0;
-                double timeCounter = 0;
-                double timeCounter500 = 0;
-                double fitnessCounter = 0;
-                int failedCounter = 0;
-                for (LinkedList<Number> ll : allResults) {
-                    evolutionsCounter += (int) ll.get(0);
-                    timeCounter += (double) ll.get(1);
-                    fitnessCounter += (double) ll.get(2);
-                    if ((double) ll.get(2) <500) {
-                        failedCounter += 1;
-                    } else {
-                        evolutionsCounter500 += (int) ll.get(0);
-                        timeCounter500 += (double) ll.get(1);
-                    }
-                }
-                System.out.println(evolutionsCounter + " : Total evolutions. " + evolutionsCounter/allResults.size() + " : Average evolutions per sample.");
-                System.out.println(timeCounter + " : Total time. " + timeCounter/allResults.size() + " : Average time per sample.");
-                System.out.println(evolutionsCounter500 + " : Total 500 evolutions. " + evolutionsCounter500/(allResults.size()-failedCounter) + " : Average evolutions per 500 sample.");
-                System.out.println(timeCounter500 + " : Total 500 time. " + timeCounter500/(allResults.size()-failedCounter) + " : Average time per 500 sample.");
-                System.out.println(fitnessCounter/allResults.size() + " : Average fitness achieved (per sample)");
-                System.out.println(failedCounter + " : Number of failures.");
+                calculateStatistics(allResults);
 
                 FileOutputStream fos = new FileOutputStream("t.tmp");
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -130,7 +108,7 @@ public class MainWindowController {
 
         retrieveResultsMenuItem.setOnAction(actionEvent -> {
             try {
-                readFile();
+                calculateStatistics(readFile());
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
@@ -140,12 +118,38 @@ public class MainWindowController {
 
     }
 
-    private void readFile() throws IOException, ClassNotFoundException {
+    private void calculateStatistics(ArrayList<LinkedList<Number>> retrievedResults) {
+        int evolutionsCounter = 0;
+        int evolutionsCounter500 = 0;
+        double timeCounter = 0;
+        double timeCounter500 = 0;
+        double fitnessCounter = 0;
+        int failedCounter = 0;
+        for (LinkedList<Number> ll : retrievedResults) {
+            evolutionsCounter += (int) ll.get(0);
+            timeCounter += (double) ll.get(1);
+            fitnessCounter += (double) ll.get(2);
+            if ((double) ll.get(2) <500) {
+                failedCounter += 1;
+            } else {
+                evolutionsCounter500 += (int) ll.get(0);
+                timeCounter500 += (double) ll.get(1);
+            }
+        }
+        System.out.println(evolutionsCounter + " : Total evolutions. " + evolutionsCounter/retrievedResults.size() + " : Average evolutions per sample.");
+        System.out.println(timeCounter + " : Total time. " + timeCounter/retrievedResults.size() + " : Average time per sample.");
+        System.out.println(evolutionsCounter500 + " : Total 500 evolutions. " + evolutionsCounter500/(retrievedResults.size()-failedCounter) + " : Average evolutions per 500 sample.");
+        System.out.println(timeCounter500 + " : Total 500 time. " + timeCounter500/(retrievedResults.size()-failedCounter) + " : Average time per 500 sample.");
+        System.out.println(fitnessCounter/retrievedResults.size() + " : Average fitness achieved (per sample)");
+        System.out.println(failedCounter + " : Number of failures.");
+    }
+
+    private ArrayList<LinkedList<Number>> readFile() throws IOException, ClassNotFoundException {
         FileInputStream fis = new FileInputStream("t.tmp");
         ObjectInputStream ois = new ObjectInputStream(fis);
-        ArrayList<Number> retrievedResulsts = (ArrayList<Number>) ois.readObject();
+        ArrayList<LinkedList<Number>> retrievedResults = (ArrayList<LinkedList<Number>>) ois.readObject();
         ois.close();
-        System.out.println(retrievedResulsts);
+        return retrievedResults;
     }
 
     private void openScheduleDisplay(DynamicSchedule dynamicSchedule) {
