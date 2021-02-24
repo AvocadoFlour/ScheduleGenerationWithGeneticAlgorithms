@@ -12,6 +12,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import main.JavaFX.MainWindow;
 import main.JavaFX.MainWindowController;
 import main.classes.Course;
 import main.classes.Vocation;
@@ -56,7 +57,13 @@ public class VocationsTabController {
         deleteVocationButton.setOnAction(actionEvent -> {
             Vocation vocationToDelete = vocationsTableView.getSelectionModel().getSelectedItem();
             try {
-                vocationsDataModel.deleteVocation((int)vocationToDelete.getId());
+                if(!vocationsDataModel.checkVocationConstraint((int)vocationToDelete.getId()))
+                {
+                    vocationsDataModel.deleteVocation((int)vocationToDelete.getId());
+                } else {
+                    MainWindow.alertWindow("Unable to delete vocation", "Foreign key constraint",
+                            "The vocation is currently the vocation of one or more class group(s)");
+                }
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }

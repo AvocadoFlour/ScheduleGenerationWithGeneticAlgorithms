@@ -9,6 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class DatabaseCommunicaton {
 
@@ -242,7 +243,29 @@ public class DatabaseCommunicaton {
         return new Vocation(vocationId, vocationName, courseRequirements);
     }
 
+    /* performs a check checking whether or not the provided vocation('s id) is a
+     * foreign key of a class group. If a class group with the provided vocation exists,
+     * returns true. If the vocation has no class groups associated with it, returns false.
+     */
+    public boolean checkVocationConstraint(Integer id) throws SQLException {
+        Connection connection = connectToDatabase();
+        String vocationConstraintCheck = "SELECT EXISTS(SELECT 1 FROM class_groups WHERE vocation_id = ? );";
+        PreparedStatement vocationConstraintCheckPreparedStatement = connection.prepareStatement(vocationConstraintCheck);
+        vocationConstraintCheckPreparedStatement.setInt(1, id);
+        ResultSet rs = vocationConstraintCheckPreparedStatement.executeQuery();
+        int check = rs.getInt(1);
+        connection.close();
+        if (check == 0) {
+            return false;
+        } else {
+            System.out.println(check + " : rs.getInt");
+            return true;
+        }
+
+    }
+
     public void deleteVocation(Integer id) throws SQLException {
+
         Connection connection = connectToDatabase();
         String vocationCourseRequirementsDeleteSql = "DELETE FROM vocation_course_requirements WHERE vocation_id = ?";
         PreparedStatement vcrdSql = connection.prepareStatement(vocationCourseRequirementsDeleteSql);

@@ -52,6 +52,10 @@ public class VocationsDataModel {
         refreshVocations();
     }
 
+    public boolean checkVocationConstraint(Integer id) throws SQLException {
+        return dbcomm.checkVocationConstraint(id);
+    }
+
     public void deleteVocation(Integer id) throws SQLException {
         dbcomm.deleteVocation(id);
         refreshVocations();

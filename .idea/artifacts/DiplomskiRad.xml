@@ -1,0 +1,20 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="DiplomskiRad">
+    <output-path>$PROJECT_DIR$/out/artifacts/DiplomskiRad</output-path>
+    <properties id="javafx-properties">
+      <options>
+        <option name="appClass" value="main.JavaFX.MainWindow" />
+        <option name="description" value="" />
+        <option name="htmlPlaceholderId" value="" />
+        <option name="title" value="Schedule genetics" />
+        <option name="vendor" value="" />
+        <option name="version" value="" />
+      </options>
+    </properties>
+    <root id="root">
+      <element id="archive" name="DiplomskiRad.jar">
+        <element id="module-output" name="DiplomskiRad" />
+      </element>
+    </root>
+  </artifact>
+</component>

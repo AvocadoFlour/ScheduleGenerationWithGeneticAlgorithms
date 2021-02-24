@@ -180,7 +180,6 @@ public class DynamicSchedule extends FitnessFunction implements IChromosome {
                 fitnessValue -= 1;
             }
         }
-
         return fitnessValue;
     }
 
