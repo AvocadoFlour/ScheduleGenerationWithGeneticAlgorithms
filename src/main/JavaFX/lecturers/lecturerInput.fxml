@@ -11,7 +11,7 @@
     <children>
       <StackPane prefHeight="40.0" prefWidth="200.0">
          <children>
-            <Label fx:id="warningText" alignment="CENTER" contentDisplay="CENTER" prefHeight="35.0" prefWidth="160.0" text="Input course details" textAlignment="CENTER" wrapText="true" StackPane.alignment="CENTER" />
+            <Label fx:id="warningText" alignment="CENTER" contentDisplay="CENTER" prefHeight="35.0" prefWidth="160.0" text="Input lecturer details" textAlignment="CENTER" wrapText="true" StackPane.alignment="CENTER" />
          </children>
       </StackPane>
         <CheckBox fx:id="literatureCheck" layoutX="26.0" layoutY="101.0" mnemonicParsing="false" text="Literature" />

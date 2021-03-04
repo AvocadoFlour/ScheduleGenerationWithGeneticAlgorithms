@@ -1,0 +1,19 @@
+.root{
+    -fx-font-size: 10pt;
+    -fx-font-family: "Candara";
+    -fx-base: rgb(196, 208, 226);
+    -fx-background: rgb(191, 199, 210);
+    -fx-border-radius: 10 10 10 10;
+    -fx-background-radius: 10 10 10 10;
+}
+
+.menu-bar{
+    -fx-border-radius: 10 10 0 0;
+    -fx-background-radius: 10 10 0 0;
+}
+
+.table-view{
+    -fx-font-family: "Constantian";
+    -fx-border-radius: 10 10 0 0;
+    -fx-background-radius: 10 10 0 0;
+}

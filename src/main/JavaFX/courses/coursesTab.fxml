@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<SplitPane dividerPositions="0.5" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.JavaFX.courses.CoursesTabController">
+<SplitPane fx:id="coursesSplitPane" dividerPositions="0.5" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.JavaFX.courses.CoursesTabController">
     <items>
         <TableView fx:id="coursesTableView" prefHeight="151.0" prefWidth="241.0" />
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">

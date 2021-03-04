@@ -66,21 +66,22 @@ public class ClassGroupsTabController {
     }
 
     private void initModel() throws SQLException {
+        classGroupsTableView.columnResizePolicyProperty().set(TableView.CONSTRAINED_RESIZE_POLICY);
         TableColumn<ClassGroup, String> classGroupNameColumn = new TableColumn<>("Group code");
         classGroupNameColumn.setCellValueFactory(new PropertyValueFactory<>("identification"));
         TableColumn<ClassGroup, String> classGroupVocationColumn = new TableColumn<>("Vocation");
         classGroupVocationColumn.setCellValueFactory(new PropertyValueFactory<>("vocationName"));
         TableColumn<ClassGroup, Integer> classGroupNumberOfStudentsColumn = new TableColumn<ClassGroup, Integer>("No. of students");
         classGroupNumberOfStudentsColumn.setCellValueFactory(new PropertyValueFactory<>("numberOfStudents"));
-        classGroupsTableView.getColumns().set(0, classGroupNameColumn);
-        classGroupsTableView.getColumns().set(1, classGroupVocationColumn);
-        classGroupsTableView.getColumns().set(2, classGroupNumberOfStudentsColumn);
-        classGroupNameColumn.prefWidthProperty().bind(classGroupsTableView.widthProperty().multiply(0.40));
-        classGroupNameColumn.setResizable(false);
-        classGroupVocationColumn.prefWidthProperty().bind(classGroupsTableView.widthProperty().multiply(0.40));
-        classGroupVocationColumn.setResizable(false);
-        classGroupNumberOfStudentsColumn.prefWidthProperty().bind(classGroupsTableView.widthProperty().multiply(0.19));
-        classGroupNumberOfStudentsColumn.setResizable(false);
+        classGroupsTableView.getColumns().add(0, classGroupNameColumn);
+        classGroupsTableView.getColumns().add(1, classGroupVocationColumn);
+        classGroupsTableView.getColumns().add(2, classGroupNumberOfStudentsColumn);
+        classGroupNameColumn.prefWidthProperty().bind(classGroupsTableView.widthProperty().multiply(0.2));
+        classGroupNameColumn.minWidthProperty().set(200);
+        classGroupVocationColumn.prefWidthProperty().bind(classGroupsTableView.widthProperty().multiply(0.60));
+        classGroupVocationColumn.minWidthProperty().set(200);
+        classGroupNumberOfStudentsColumn.prefWidthProperty().bind(classGroupsTableView.widthProperty().multiply(0.2));
+        classGroupNumberOfStudentsColumn.minWidthProperty().set(200);
         classGroupsTableView.getItems().clear();
         classGroupDataModel.loadClassGroups();
         classGroupsTableView.setItems(classGroupDataModel.getClassGroupsList());

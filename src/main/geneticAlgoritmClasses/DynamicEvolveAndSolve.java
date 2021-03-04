@@ -15,7 +15,7 @@ public class DynamicEvolveAndSolve {
 
     public static final double FINAL_FITNESS_VALUE = 500;
     static final int EVOLUTION_REVOLUTIONS = 500;
-    static final int POPULATION_SIZE = 100;
+    static final int POPULATION_SIZE = 250;
     public static  ArrayList<ClassGroup> classGroupsArrayList;
     public static ArrayList<Course> coursesArrayList;
     public static ArrayList<Lecturer> lecturersArrayList;

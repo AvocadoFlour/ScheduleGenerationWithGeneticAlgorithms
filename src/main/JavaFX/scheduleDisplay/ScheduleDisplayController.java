@@ -119,7 +119,6 @@ public class ScheduleDisplayController {
         fridayPane.getChildren().removeIf(r -> r instanceof Rectangle);
     }
 
-
     public void drawSchedule(ArrayList<Lecture> e) {
         setStageTitle(e.get(0).getClassGroup().getClassIdentification());
         for (Lecture l : e) {

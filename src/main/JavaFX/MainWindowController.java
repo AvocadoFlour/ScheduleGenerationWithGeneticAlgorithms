@@ -1,10 +1,18 @@
 package main.JavaFX;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.shape.Line;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -28,6 +36,8 @@ import main.geneticAlgoritmClasses.DynamicEvolveAndSolve;
 import main.geneticAlgoritmClasses.DynamicSchedule;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Array;
 import java.sql.SQLException;
 import java.util.*;
@@ -49,7 +59,19 @@ public class MainWindowController {
     @FXML
     private LectureHallsTabController lectureHallsTabController;
     @FXML
-    MenuItem testiranjeCrtanjaRasporeda;
+    private MenuItem testiranjeCrtanjaRasporeda;
+    @FXML
+    private AnchorPane menuAndContextContainerAnchorPane;
+    @FXML
+    private BorderPane mainWindowBorderPane;
+    @FXML
+    private MenuBar menuBar;
+    @FXML
+    private Button maximizeButton;
+    @FXML
+    private Button minimizeButton;
+    @FXML
+    private Button closeButton;
 
     private VocationsDataModel vocationsDataModel;
     private ClassGroupDataModel classGroupDataModel;
@@ -57,7 +79,48 @@ public class MainWindowController {
     private LectureHallsDataModel lectureHallsDataModel;
     private LecturersDataModel lecturersDataModel;
 
+    private double xOffset = 0;
+    private double yOffset = 0;
+
     public void initialize() throws SQLException, IOException {
+
+        minimizeButton.setOnAction(actionEvent -> {
+            Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+            // is stage minimizable into task bar. (true | false)
+            stage.setIconified(true);
+        });
+        maximizeButton.setOnAction(actionEvent -> {
+            Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+            stage.setMaximized(!stage.isMaximized());
+        });
+        closeButton.setOnAction(actionEvent -> {
+            Stage stage = (Stage)((Button)actionEvent.getSource()).getScene().getWindow();
+            MainWindow.mainStage.close();
+        });
+
+        mainWindowBorderPane.setPrefHeight(MainWindow.mainStage.getHeight());
+        mainWindowBorderPane.setPrefWidth(MainWindow.mainStage.getWidth());
+
+        // Mimicking Windows's method of moving windows by making it possible to move the window by
+        // clicking on the menu bar and dragging it.
+       // https://stackoverflow.com/a/13460743/10299831
+        menuBar.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            }
+        });
+        menuBar.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                MainWindow.mainStage.setX(event.getScreenX() - xOffset);
+                MainWindow.mainStage.setY(event.getScreenY() - yOffset);
+            }
+        });
+
+
+        menuAndContextContainerAnchorPane.prefWidthProperty().bind(mainWindowBorderPane.widthProperty());
 
         this.vocationsDataModel = new VocationsDataModel();
         this.classGroupDataModel = new ClassGroupDataModel();

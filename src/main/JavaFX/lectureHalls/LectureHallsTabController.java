@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -95,6 +96,10 @@ public class LectureHallsTabController {
         // Serves the purpose of the new window being imposed over the other window
         stage.initModality(Modality.APPLICATION_MODAL);
 
+        // The following line makes it so that there will only be a single task icon in the task bar
+        // when a new stage is show, which in this case is the input stage
+        stage.initOwner( ((Node)actionEvent.getSource()).getScene().getWindow() );
+
         stage.show();
 
     }
@@ -109,10 +114,13 @@ public class LectureHallsTabController {
         TableColumn<LectureHall, String> hallCodeColumn = new TableColumn<>("Hall code");
         TableColumn<LectureHall, Integer> hallCapacityColumn = new TableColumn<>("Hall capacity");
         hallCodeColumn.setCellValueFactory(new PropertyValueFactory<>("hallCode"));
+        hallCodeColumn.prefWidthProperty().bind(lectureHallsTableView.widthProperty().multiply(0.50));
         hallCapacityColumn.setCellValueFactory(new PropertyValueFactory<>("capacity"));
+        hallCapacityColumn.prefWidthProperty().bind(lectureHallsTableView.widthProperty().multiply(0.50));
         lectureHallsTableView.getColumns().add(0, hallCodeColumn);
+        hallCodeColumn.setResizable(false);
         lectureHallsTableView.getColumns().add(1, hallCapacityColumn);
-
+        hallCapacityColumn.setResizable(false);
         lectureHallsTableView.getItems().clear();
         lectureHallsDataModel.loadLectureHalls();
         lectureHallsTableView.setItems(lectureHallsDataModel.getLectureHallList());
