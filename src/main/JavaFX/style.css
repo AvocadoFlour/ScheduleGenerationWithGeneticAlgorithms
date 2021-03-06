@@ -7,6 +7,14 @@
     -fx-background-radius: 10 10 10 10;
 }
 
+.button {
+    -fx-background-color: rgb(118, 175, 222);
+}
+
+.button:hover {
+    -fx-background-color: rgb(86, 153, 210);
+}
+
 .menu-bar{
     -fx-border-radius: 10 10 0 0;
     -fx-background-radius: 10 10 0 0;
@@ -16,4 +24,40 @@
     -fx-font-family: "Constantian";
     -fx-border-radius: 10 10 0 0;
     -fx-background-radius: 10 10 0 0;
+}
+
+#additionalWindow{
+    -fx-base: rgb(196, 208, 226);
+    -fx-background: rgb(191, 199, 210);
+    -fx-border-width: 2;
+    -fx-border-color: darkgray;
+}
+
+.alert.information.dialog-pane:header *.header-panel{
+    -fx-border-color: #cd3e3e;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-radius: 10 10 0 0;
+    -fx-font-family: "Arial black";
+}
+
+.alert.information.dialog-pane.alert {
+    -fx-border-color: #be4e4e;
+    -fx-border-width: 2;
+    -fx-font-family: "Arial Black";
+}
+
+#utilityButton {
+    -fx-background-color: rgb(229, 131, 78);
+}
+
+#utilityButton:hover {
+    -fx-background-color: rgb(227, 109, 43);
+}
+
+#closeButton {
+    -fx-background-color: rgb(229, 61, 61);
+}
+
+#closeButton:hover {
+    -fx-background-color: rgb(222, 19, 19);
 }

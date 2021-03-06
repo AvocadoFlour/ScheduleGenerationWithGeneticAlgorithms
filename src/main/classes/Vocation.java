@@ -51,8 +51,13 @@ public class Vocation {
     public StringProperty courseRequirementsProperty() {
         StringProperty courseRequirementsSP = new SimpleStringProperty();
         StringBuilder sb = new StringBuilder();
+        int counter = 0;
         for(Map.Entry<Course, Integer> m : this.courseRequirements.entrySet()) {
-            sb.append(m.getKey().getCourseName() + " " + m.getValue());
+            counter += 1;
+            sb.append(m.getKey().getCourseName() + " | Sati: " + m.getValue());
+            if (counter < this.courseRequirements.entrySet().size()) {
+                sb.append(" \n");
+            }
         }
         courseRequirementsSP.set(sb.toString());
         return courseRequirementsSP;

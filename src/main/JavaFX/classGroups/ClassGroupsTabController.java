@@ -3,14 +3,18 @@ package main.JavaFX.classGroups;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Modality;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+import main.JavaFX.MainWindow;
 import main.JavaFX.MainWindowController;
 import main.classes.ClassGroup;
 import main.classes.Vocation;
@@ -23,6 +27,10 @@ public class ClassGroupsTabController {
 
     private MainWindowController mainController;
     @FXML
+    private VBox classGroupsTabVBox;
+    @FXML
+    private HBox classGroupsTabHBox;
+    @FXML
     Button createClassGroupButton;
     @FXML
     Button deleteClassGroupButton;
@@ -32,6 +40,8 @@ public class ClassGroupsTabController {
     private ObservableList<Vocation> vocationsList;
 
     public void initialize() throws SQLException {
+
+        setupUiControls();
 
         createClassGroupButton.setOnAction(actionEvent -> {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("classGroupInput.fxml"));
@@ -46,11 +56,10 @@ public class ClassGroupsTabController {
             classGroupInputController.initModelVocationsDataModel(mainController.getVocationsDataModel());
             classGroupInputController.initClassGroupDataModel(classGroupDataModel);
             stage.setTitle("Class group Input");
-            stage.setScene(new Scene(root));
-            stage.setResizable(false);
-            // Serves the purpose of the new window being imposed over the other window
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
+
+            Window window = ((Node)actionEvent.getSource()).getScene().getWindow();
+            MainWindow.showInputWindow(root,stage, window);
+
         });
 
         deleteClassGroupButton.setOnAction(actionEvent -> {
@@ -63,6 +72,21 @@ public class ClassGroupsTabController {
             }
         });
 
+    }
+
+    private void setupUiControls() {
+        classGroupsTableView.prefHeightProperty().bind(classGroupsTabVBox.heightProperty().multiply(0.9));
+        //vocationsTabHBox.setPadding(new Insets(0, 0, 0, 0));
+        classGroupsTabHBox.setAlignment(Pos.CENTER);
+        classGroupsTabHBox.setPrefHeight(100);
+        classGroupsTabHBox.spacingProperty().bind(classGroupsTabHBox.widthProperty().multiply(0.15));
+
+        deleteClassGroupButton.setMinWidth(130.0);
+        deleteClassGroupButton.setPrefWidth(130.0);
+        deleteClassGroupButton.setMaxWidth(130.0);
+        createClassGroupButton.setMinWidth(180.0);
+        createClassGroupButton.setPrefWidth(180.0);
+        createClassGroupButton.setMaxWidth(180.0);
     }
 
     private void initModel() throws SQLException {

@@ -3,15 +3,18 @@ package main.JavaFX.lecturers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Modality;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+import main.JavaFX.MainWindow;
 import main.JavaFX.MainWindowController;
 import main.classes.Lecturer;
 
@@ -21,15 +24,23 @@ import java.sql.SQLException;
 public class LecturersTabController {
 
     @FXML
+    private VBox lecturersVBox;
+    @FXML
+    private HBox lecturersHBox;
+    @FXML
     private TableView<Lecturer> lecturersTableView;
     @FXML
     private Button addNewLecturerButton;
     @FXML
     private Button deleteLecturerButton;
+    @FXML
+    private Button createNewLecturerButton;
     private LecturersDataModel lecturersDataModel;
     private MainWindowController mainWindowController;
 
     public void initialize() throws SQLException {
+
+        setupUiControls();
 
         deleteLecturerButton.setOnAction(actionEvent -> {
             Lecturer lecturer = lecturersTableView.getSelectionModel().getSelectedItem();
@@ -40,6 +51,21 @@ public class LecturersTabController {
             }
         });
 
+    }
+
+    private void setupUiControls() {
+        lecturersTableView.prefHeightProperty().bind(lecturersVBox.heightProperty().multiply(0.9));
+        //vocationsTabHBox.setPadding(new Insets(0, 0, 0, 0));
+        lecturersHBox.setAlignment(Pos.CENTER);
+        lecturersHBox.setPrefHeight(100);
+        lecturersHBox.spacingProperty().bind(lecturersHBox.widthProperty().multiply(0.15));
+
+        deleteLecturerButton.setMinWidth(130.0);
+        deleteLecturerButton.setPrefWidth(130.0);
+        deleteLecturerButton.setMaxWidth(130.0);
+        createNewLecturerButton.setMinWidth(130.0);
+        createNewLecturerButton.setPrefWidth(130.0);
+        createNewLecturerButton.setMaxWidth(130.0);
     }
 
     public void openLecturerInputWindow(ActionEvent actionEvent) {
@@ -56,19 +82,8 @@ public class LecturersTabController {
         LecturerInputControler lecturerInputControler = loader.getController();
         lecturerInputControler.initModel(lecturersDataModel);
         stage.setTitle("Lecturer Input");
-        if (root!=null) {
-            stage.setScene(new Scene(root));
-            stage.setResizable(false);
-        } else {throw new NullPointerException();}
-
-        // Serves the purpose of the new window being imposed over the other window
-        stage.initModality(Modality.APPLICATION_MODAL);
-
-        // The following line makes it so that there will only be a single task icon in the task bar
-        // when a new stage is show, which in this case is the input stage
-        stage.initOwner( ((Node)actionEvent.getSource()).getScene().getWindow() );
-
-        stage.show();
+        Window window = ((Node)actionEvent.getSource()).getScene().getWindow();
+        MainWindow.showInputWindow(root,stage, window);
 
     }
 

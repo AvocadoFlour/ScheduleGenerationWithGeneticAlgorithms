@@ -3,15 +3,13 @@ package main.JavaFX.courses;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import main.JavaFX.MainWindow;
@@ -25,18 +23,20 @@ public class CoursesTabController {
 
     private CoursesDataModel coursesDataModel;
     @FXML
-    private SplitPane coursesSplitPane;
+    private VBox coursesVBox;
     @FXML
     private TableView<Course> coursesTableView;
     @FXML
-    private Button addNewCourseButton;
+    private Button createNewCourseButton;
     @FXML
     private Button deleteLCourseButton;
     private MainWindowController mainWindowController;
 
     public void initialize() throws SQLException {
 
-        addNewCourseButton.setOnAction(actionEvent -> {
+        setupUiControls();
+
+        createNewCourseButton.setOnAction(actionEvent -> {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("courseInput.fxml"));
             Stage stage = new Stage();
             Parent root = null;
@@ -49,21 +49,11 @@ public class CoursesTabController {
 
             CourseInputController courseInputController = loader.getController();
             courseInputController.initModel(coursesDataModel);
-
             stage.setTitle("Course Input");
-            if (root!=null) {
-                stage.setScene(new Scene(root));
-                stage.setResizable(false);
-            } else {throw new NullPointerException();}
 
-            // Serves the purpose of the new window being imposed over the other window
-            stage.initModality(Modality.APPLICATION_MODAL);
+            Window window = ((Node)actionEvent.getSource()).getScene().getWindow();
+            MainWindow.showInputWindow(root,stage, window);
 
-            // The following line makes it so that there will only be a single task icon in the task bar
-            // when a new stage is show, which in this case is the input stage
-            stage.initOwner( ((Node)actionEvent.getSource()).getScene().getWindow() );
-
-            stage.show();
         });
 
         deleteLCourseButton.setOnAction(actionEvent -> {
@@ -71,13 +61,26 @@ public class CoursesTabController {
             try {
                 coursesDataModel.deleteCourse(course.getId());
             } catch (SQLException e) {
-                MainWindow.alertWindow("Notification", "This course is currently " +
+                MainWindow.showAlertWindow("Notification", "This course is currently " +
                         "associated with a vocation and cannot be deleted because of that.", e.getLocalizedMessage());
                 e.printStackTrace();
             }
         });
 
     };
+
+    private void setupUiControls() {
+        //vocationsTabHBox.setPadding(new Insets(0, 0, 0, 0));
+        coursesVBox.setAlignment(Pos.CENTER);
+        coursesVBox.spacingProperty().bind(coursesVBox.widthProperty().multiply(0.15));
+
+        deleteLCourseButton.setMinWidth(130.0);
+        deleteLCourseButton.setPrefWidth(130.0);
+        deleteLCourseButton.setMaxWidth(130.0);
+        createNewCourseButton.setMinWidth(130.0);
+        createNewCourseButton.setPrefWidth(130.0);
+        createNewCourseButton.setMaxWidth(130.0);
+    }
 
     public void openCoursesInputWindow(ActionEvent actionEvent) throws SQLException {
     }

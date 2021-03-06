@@ -28,16 +28,16 @@
                 </Menu>
               </menus>
             </MenuBar>
-            <Button fx:id="closeButton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" prefHeight="25.0" prefWidth="28.0" text="×" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="4.0">
+            <Button id="closeButton" fx:id="closeButton" alignment="CENTER" focusTraversable="false" mnemonicParsing="false" prefHeight="25.0" prefWidth="28.0" text="×" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="4.0">
                <font>
-                  <Font name="Garamond Bold" size="12.0" />
+                  <Font name="Garamond Bold" size="13.0" />
                </font>
             </Button>
-            <Button fx:id="minimizeButton" alignment="CENTER" ellipsisString="🗕" focusTraversable="false" mnemonicParsing="false" prefHeight="25.0" prefWidth="28.0" text="🗕" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="62.0" AnchorPane.topAnchor="4.0">
+            <Button id="utilityButton" fx:id="minimizeButton" alignment="CENTER" ellipsisString="🗕" focusTraversable="false" mnemonicParsing="false" prefHeight="25.0" prefWidth="28.0" text="🗕" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="65.0" AnchorPane.topAnchor="4.0">
                <font>
                   <Font name="Candara Bold" size="12.0" />
                </font></Button>
-            <Button fx:id="maximizeButton" alignment="CENTER" contentDisplay="CENTER" ellipsisString="🗖" focusTraversable="false" graphicTextGap="0.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="28.0" text="🗖" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="4.0">
+            <Button id="utilityButton" fx:id="maximizeButton" alignment="CENTER" contentDisplay="CENTER" ellipsisString="🗖" focusTraversable="false" graphicTextGap="0.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="28.0" text="🗖" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="4.0">
                <font>
                   <Font name="Candara Bold" size="12.0" />
                </font></Button>

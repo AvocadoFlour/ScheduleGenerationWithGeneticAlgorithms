@@ -5,15 +5,18 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Modality;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+import main.JavaFX.MainWindow;
 import main.JavaFX.MainWindowController;
 import main.classes.LectureHall;
 
@@ -21,20 +24,27 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class LectureHallsTabController {
+
+    @FXML
+    private VBox lectureHallsVBox;
+    @FXML
+    private HBox lectureHallsHBox;
     @FXML
     private TableView<LectureHall> lectureHallsTableView;
     @FXML
     private Button addNewLectureHallButton;
     @FXML
     private Button deleteLectureHallButton;
+    @FXML
+    private Button createNewLectureHallButton;
     private LectureHallsDataModel lectureHallsDataModel;
     private MainWindowController mainWindowController;
 
+
     public void initialize() throws SQLException {
 
-        /**
-         * Delete button functionality
-         */
+        setupUiControls();
+
         deleteLectureHallButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -87,21 +97,24 @@ public class LectureHallsTabController {
             e.printStackTrace();
         }
 
-        LectureHallInputController lectureHallInputController = loader.getController();
-        lectureHallInputController.initModel(lectureHallsDataModel);
-        stage.setTitle("Lecture hall Input");
-        stage.setScene(new Scene(root));
-        stage.setResizable(false);
+        Window window = ((Node)actionEvent.getSource()).getScene().getWindow();
+        MainWindow.showInputWindow(root,stage, window);
 
-        // Serves the purpose of the new window being imposed over the other window
-        stage.initModality(Modality.APPLICATION_MODAL);
+    }
 
-        // The following line makes it so that there will only be a single task icon in the task bar
-        // when a new stage is show, which in this case is the input stage
-        stage.initOwner( ((Node)actionEvent.getSource()).getScene().getWindow() );
+    private void setupUiControls() {
+        lectureHallsTableView.prefHeightProperty().bind(lectureHallsVBox.heightProperty().multiply(0.9));
+        //vocationsTabHBox.setPadding(new Insets(0, 0, 0, 0));
+        lectureHallsHBox.setAlignment(Pos.CENTER);
+        lectureHallsHBox.setPrefHeight(100);
+        lectureHallsHBox.spacingProperty().bind(lectureHallsHBox.widthProperty().multiply(0.15));
 
-        stage.show();
-
+        deleteLectureHallButton.setMinWidth(130.0);
+        deleteLectureHallButton.setPrefWidth(130.0);
+        deleteLectureHallButton.setMaxWidth(130.0);
+        createNewLectureHallButton.setMinWidth(180.0);
+        createNewLectureHallButton.setPrefWidth(180.0);
+        createNewLectureHallButton.setMaxWidth(180.0);
     }
 
     /**
